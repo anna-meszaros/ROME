@@ -1,0 +1,1 @@
+In order to obtain the distribution of trajectories used in the paper, execute the ForkingPaths\_dataGen.py script after processing the data in the Forking\_Paths\_complete folder. On details for how to do the latter please consult the README within the aforementioned folder.
