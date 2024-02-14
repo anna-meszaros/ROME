@@ -2,9 +2,11 @@
 import pickle
 import matplotlib.pyplot as plt
 import numpy as np
-from Prob_function import OPTICS_GMM
 import seaborn as sns
+import sys
 
+sys.path.append('../')
+from ROME.Prob_function import OPTICS_GMM
 
 #%% Load the data
 

@@ -7,48 +7,33 @@ import os
 import scipy as sp
 
 #%% Write tables
-def write_table(data, filename, decimal_place = 2):
+def write_tables(data, filename, decimal_place = 2):
 
     assert len(data.shape) == 3, 'Data must have 3 dimensions'
-    assert data.shape[0] == 4, 'Data must have 4 datasets'
-    assert data.shape[1] == 9, 'Data must have 9 models/metric combinations'
 
     num_data_columns = data.shape[1]
+    if 5 < num_data_columns:
+        width = r'\textwidth'
+    else:
+        width = r'\linewidth'
         
     # Allow for split table
-    Output_string = r'\begin{tabularx}{\textwidth}'
+    Output_string = r'\begin{tabularx}{' + width + r'}'
     
-    Output_string += r'{X | Y Y Y | Y Y Y | Y Y Y}'
+    Output_string += r'{X' + num_data_columns * (r' | ' + r'Z') + r'} '
     Output_string += '\n'
 
     Output_string += r'\toprule[1pt] '
     Output_string += '\n'
 
-    Metrics = [r'$D_{JS} \downarrow_{0}^{1}$', r'$\widehat{W} \rightarrow 0$', r'$\widehat{L} \uparrow$']
-    Methods = [r'$f_{\text{ROME}}$', r'$f_{\text{MPW}}$', r'$f_{\text{VC}}$']
-    
-    for metric in Metrics:
-        Output_string += r'& \multicolumn{' + str(len(Methods)) + r'}'
-        if metric == Metrics[-1]:
-            Output_string += r'{c}'
-        else:
-            Output_string += r'{c|}'
-            
-        Output_string += r'{' + metric + r'} '
-    
-    Output_string += r' \\'
-    
-    for metric in Metrics:
-        for method in Methods:
-            Output_string += r'& \multicolumn{1}'
-            if (metric != Metrics[-1]) and method == Methods[-1]:
-                Output_string += r'{c|}'
-            else:
-                Output_string += r'{c}'
-                
-            Output_string += r'{' + method + r'} '
-    
-    Output_string += r' \\ \midrule[1pt]'
+    num_std = int((num_data_columns - 1) * 2 / 3)
+    num_no_std = num_data_columns - 1 - num_std
+
+    Output_string += r'& \multicolumn{' + str(num_std) + r'}{c|}{std} & \multicolumn{' + str(num_no_std) + r'}{c|}{no std} '
+    Output_string += r'& \multirow{2}{*}{GMM} \\'
+    Output_string += '\n'
+
+    Output_string += r'& \multicolumn{' + str(num_no_std) + r'}{c|}{PCA} & \multicolumn{' + str(num_std) + r'}{c|}{no PCA} & \\ \midrule[1pt]'
     Output_string += '\n'
 
     data_mean = np.nanmean(data, axis = -1)
@@ -59,15 +44,14 @@ def write_table(data, filename, decimal_place = 2):
 
     extra_str_length = max(len(min_value), len(max_value)) - (decimal_place + 1)
     
-    Row_names = ['Aniso', 'Varied', 'Two Moons', 'Trajectories']
+    Row_names = ['Silhouette', 'DBCV', 'No clusters']
     
     for i, row_name in enumerate(Row_names): 
         Output_string += row_name + ' '
-    
-        T1 = r'& {{\scriptsize ${:0.' + str(decimal_place + 1) + r'f}^{{\pm {:0.' + str(decimal_place + 1) + r'f}}}$}} '
-        T0 = r'& {{\scriptsize ${:0.' + str(decimal_place) + r'f}^{{\pm {:0.' + str(decimal_place) + r'f}}}$}} '
-                
-        template = T1 * len(Methods) + T0 * len(Methods) * (len(Metrics) - 1)
+
+        
+        template = ((r'& {{\scriptsize ${:0.' + str(decimal_place) + r'f}^{{\pm {:0.' + str(decimal_place) + 
+                     r'f}}}$}} ') * (num_data_columns))
         
         Str = template.format(*np.array([data_mean[i], data_std[i]]).T.reshape(-1))
 
@@ -77,28 +61,23 @@ def write_table(data, filename, decimal_place = 2):
         # Adapt length to align decimal points
         Str_parts = Str.split('$} ')
         for idx, string in enumerate(Str_parts):
-            if idx < len(Methods):
-                dp = decimal_place + 1 
-            else:
-                dp = decimal_place
-            
             if len(string) == 0:
                 continue
-            # previous_string = string.split('.')[0].split('$')[-1]
-            # overwrite = False
-            # if previous_string[0] == '-':
-            #     overwrite = previous_string[1:].isnumeric()
-            # else:
-            #     overwrite = previous_string.isnumeric()
-            # if overwrite:
-            #     needed_buffer = extra_str_length - len(previous_string)  
-            #     if needed_buffer > 0:
-            #         Str_parts[idx] = string[:16] + r'\hphantom{' + '0' * needed_buffer + r'}' + string[16:]
+            previous_string = string.split('.')[0].split('$')[-1]
+            overwrite_string = False
+            if previous_string[0] == '-':
+                overwrite_string = previous_string[1:].isnumeric()
+            else:
+                overwrite_string = previous_string.isnumeric()
+            if overwrite_string:
+                needed_buffer = extra_str_length - len(previous_string)  
+                if needed_buffer > 0:
+                    Str_parts[idx] = string[:16] + r'\hphantom{' + '0' * needed_buffer + r'}' + string[16:]
             
             # Check for too long stds
             string_parts = Str_parts[idx].split('^')
             if len(string_parts) > 1 and 'hphantom' not in string_parts[1]:
-                std_number = string_parts[1][5:7 + dp]
+                std_number = string_parts[1][5:7 + decimal_place]
                 if std_number[-1] == '.':
                     std_number = std_number[:-1] + r'\hphantom{0}'
                 string_parts[1] = r'{\pm ' + std_number + r'}' 
@@ -131,15 +110,26 @@ random_seeds = [
 
 # list of ablation keys
 ablation_keys = ['config_cluster_PCA_stdKDE',
-                 'MP_Windows',
-                 'MPS_Windows',
-                 'MPK_Windows',
-                 'KDevine']
-
-# list of ablation keys
-ablation_keys = ['config_cluster_PCA_stdKDE',
-                 'MPS_Windows',
-                 'KDevine']
+                 'config_cluster_PCAKDE',
+                 'config_cluster_stdKDE',
+                 'config_DBCV_PCA_stdKDE',
+                 'config_DBCV_PCAKDE',
+                 'config_DBCV_stdKDE',
+                 'config_PCA_stdKDE',
+                 'config_PCAKDE',
+                 'config_stdKDE',
+                 'config_clusterGMM',
+                 'config_DBCVGMM',
+                 'configGMM',
+                 'config_cluster_PCA_stdKNN',
+                 'config_cluster_PCAKNN',
+                 'config_cluster_stdKNN',
+                 'config_DBCV_PCA_stdKNN',
+                 'config_DBCV_PCAKNN',
+                 'config_DBCV_stdKNN',
+                 'config_PCA_stdKNN',
+                 'config_PCAKNN',
+                 'config_stdKNN']
 
 # list of dataset keys
 dataset_keys = ['noisy_moons_n_samples_200',
@@ -157,9 +147,7 @@ dataset_keys = ['noisy_moons_n_samples_200',
                 'noisy_moons_n_samples_6000',
                 'varied_n_samples_6000',
                 'aniso_n_samples_6000',
-                'Trajectories_n_samples_6000'
-                ]
-
+                'Trajectories_n_samples_6000']
 
 #%% Load Results
 JSD_testing = {}
@@ -170,18 +158,18 @@ fitting_pf_testing_log_likelihood = {}
 # loop through all results files and save to corresponding dictionaries
 for rndSeed in random_seeds:
 
-    JSD_testing = {**JSD_testing, **pickle.load(open('./Distribution Datasets/Results/rndSeed'+str(rndSeed[0])+str(rndSeed[1])+
+    JSD_testing = {**JSD_testing, **pickle.load(open('../Distribution Datasets/Results/rndSeed'+str(rndSeed[0])+str(rndSeed[1])+
                                                      '_JSD_testing', 'rb'))}
 
     Wasserstein_data_fitting_testing = {**Wasserstein_data_fitting_testing,
-                                        **pickle.load(open('./Distribution Datasets/Results/rndSeed'+str(rndSeed[0])+str(rndSeed[1])+
+                                        **pickle.load(open('../Distribution Datasets/Results/rndSeed'+str(rndSeed[0])+str(rndSeed[1])+
                                                            '_Wasserstein_data_fitting_testing', 'rb'))}
     Wasserstein_data_fitting_sampled = {**Wasserstein_data_fitting_sampled,
-                                        **pickle.load(open('./Distribution Datasets/Results/rndSeed'+str(rndSeed[0])+str(rndSeed[1])+
+                                        **pickle.load(open('../Distribution Datasets/Results/rndSeed'+str(rndSeed[0])+str(rndSeed[1])+
                                                            '_Wasserstein_data_fitting_sampled', 'rb'))}
     
     fitting_pf_testing_log_likelihood = {**fitting_pf_testing_log_likelihood,
-                                         **pickle.load(open('./Distribution Datasets/Log_Likelihoods/rndSeed'+str(rndSeed[0])+str(rndSeed[1])+
+                                         **pickle.load(open('../Distribution Datasets/Log_Likelihoods/rndSeed'+str(rndSeed[0])+str(rndSeed[1])+
                                                             '_fitting_pf_testing_log_likelihood', 'rb'))}
 
 #%% Plotting
@@ -194,6 +182,7 @@ Results_small = Results.copy()
 use_small_traj_std = False
 # Fill the array with the values from the dictionaries
 for _, (k, v) in enumerate(JSD_testing.items()):
+    
     results = np.ones(3) * np.nan
     # Get metrics from key
     if not isinstance(JSD_testing[k], str):
@@ -241,15 +230,55 @@ datasets_used = [4, 3, 0, 5]
 Results = Results[:, datasets_used]
 
 #%% Write tables
-# Use results from 3000 samples only
-Data = Results[-1, :, :, :, :]
+rows = np.array([0 if 'cluster' in key else 1 if 'DBCV' in key else 2 for key in ablation_keys])
+        
+# hardcode columns
+columns = np.array([0, 4, 2, 6, 1, 5, 3])
 
-# Collapse models and metrics
-Data = Data.transpose(0,2,1,3).reshape((len(datasets_used), 9, 100))
-filename = './Tables/baseline_20000.tex'
+Results = np.stack([Results[:,:,rows == row] for row in np.unique(rows)], axis = 2)
+Results = Results[:, :, :, columns]
 
-write_table(Data, filename, 2)
+# For one specific table:
+Results[-2,-1,:,:,0] *= 10
+
+metric_keys = ['JSD',
+               'W_hat',
+               'L_hat']
+
+for i in range(Results.shape[1]):
+    N_ind = -2 # Use 3000 samples only
+    for j, metric in enumerate(metric_keys):
+        data = Results[N_ind, i, :, :, j] 
+        assert np.prod(data.shape[:2]) == len(ablation_keys), 'Data must have same length as ablation keys'
+
+        # Get filename
+        data_keys = np.array(dataset_keys).reshape((-1, 6))[N_ind]
+        filename = '../Tables/' + metric + '_' + data_keys[datasets_used[i]] + '.tex'
+
+        if not os.path.exists(filename):
+            os.makedirs(os.path.dirname(filename), exist_ok=True)
+
+        if metric == "JSD":
+            decimal_place = 3
+        else:
+            decimal_place = 2
+
+        write_tables(data, filename, decimal_place)
+
+#%% For each metric and each dataset plot the ablation results side by side
+# with the mean and quantile values as boxplots
+
+Data_aniso = Results[-1, 0,:,:,2] # get results for 3000 samples
+data_aniso_clust_kde = Data_aniso[:2, [0,2,4]]
+# Forget nan values
+data_aniso_clust_kde = data_aniso_clust_kde[:,:,np.isfinite(data_aniso_clust_kde).all((0,1))]
 
 
+# Get paired tests
+Diff = data_aniso_clust_kde[:,[0]] - data_aniso_clust_kde[:,[1,2]]
+T_paired, P_paired = sp.stats.ttest_1samp(Diff, 0, axis = -1)
 
+# Get unpaired tests
+T_unpaired, P_unpaired = sp.stats.ttest_ind(data_aniso_clust_kde[:,[0]], data_aniso_clust_kde[:,[1,2]], 
+                                            axis = -1, equal_var = False)
 

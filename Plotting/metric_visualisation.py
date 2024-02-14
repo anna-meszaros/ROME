@@ -3,8 +3,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pickle
 import re
+import sys
 
-from utils import *
+sys.path.append('../')
+
+from ROME.utils import *
 
 #%% Load Results
 JSD_testing = {}
