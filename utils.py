@@ -40,6 +40,24 @@ def calculate_JSD(log_like_Ptrue, log_like_Ptest, log_like_Qtrue, log_like_Qtest
 
     return JSD
 
+
+def calculate_JSD_true(log_like_P, log_like_Q):
+    # calculate the log likelihood of the combined data; can be seen as a form of importance sampling
+    log_like_PQ = logsumexp(np.stack((log_like_P, log_like_Q), axis=0), axis=0) - np.log(2) 
+
+    helpP = log_like_P - log_like_PQ
+    helpQ = log_like_Q - log_like_PQ
+
+    # calculate the KLD of P and Q
+    KLD_P = np.mean(np.exp(helpP) * helpP)
+    KLD_Q = np.mean(np.exp(helpQ) * helpQ)
+
+    # calculate the JSD of P and Q
+    JSD = (KLD_P + KLD_Q) / 2
+    JSD /= np.log(2)
+
+    return JSD
+
 def calculate_Wasserstein(log_like_Ptrue, log_like_Ptest):
     # calculate the Wasserstein distance between the log-likelihoods of the true and test data
     Wasserstein = stats.wasserstein_distance(log_like_Ptrue, log_like_Ptest)

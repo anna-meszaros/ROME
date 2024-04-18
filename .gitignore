@@ -1,0 +1,37 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+python_packages/
+
+# ignore raw data files
+*.pkl
+*.csv
+*.txt
+*.tfw
+*.tif
+*.tsv
+!requirements.txt
+*.log
+*.npy
+*.dill
+*.feather
+*.zip
+*.xlsx
+*.docx
+*.json
+*.xml
+*.tar
+*.tar.part
+*.pcd.bin
+
+# ignore result files
+Distribution\ Datasets/Fitted_Dists
+Distribution\ Datasets/Log_Likelihoods
+Distribution\ Datasets/Results
+Distribution\ Datasets/CyberZoo Data
+Distribution\ Datasets/2D-Distributions/Processed_Data
+Distribution\ Datasets/2D-Distributions/Plots
+Distribution\ Datasets/Forking_Paths/Processed_Data
+Distribution\ Datasets/Forking_Paths/Plots
+Distribution\ Datasets/Forking_Paths/Forking_Paths_complete/data
+Tables
+
