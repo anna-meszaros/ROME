@@ -23,6 +23,7 @@ def plot_cluster_results(samples, labels, plot_file):
     plt.ylabel("$y$")
     # Equal aspect ratio
     plt.axis('equal')
+    plt.gca().set_axis_off()
     
     os.makedirs(os.path.dirname(plot_file), exist_ok = True)
     fig.savefig(plot_file + '.pdf', bbox_inches='tight')
@@ -43,6 +44,7 @@ def plot_trajectory_cluster_results(samples, labels, plot_file):
     plt.ylabel("$y$")
     # Equal aspect ratio
     plt.axis('equal')
+    plt.gca().set_axis_off()
     
     os.makedirs(os.path.dirname(plot_file), exist_ok = True)
     fig.savefig(plot_file + '.pdf', bbox_inches='tight')
