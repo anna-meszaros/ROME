@@ -6,6 +6,7 @@ python_packages/
 *.pkl
 *.csv
 *.txt
+*.pyc
 *.tfw
 *.tif
 *.tsv
@@ -33,5 +34,6 @@ Distribution\ Datasets/2D-Distributions/Plots
 Distribution\ Datasets/Forking_Paths/Processed_Data
 Distribution\ Datasets/Forking_Paths/Plots
 Distribution\ Datasets/Forking_Paths/Forking_Paths_complete/data
+Hyperparameter_test/Plots
 Tables
 
