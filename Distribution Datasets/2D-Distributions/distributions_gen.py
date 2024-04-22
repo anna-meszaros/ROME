@@ -1,4 +1,5 @@
 #%%
+import os
 import numpy as np
 import matplotlib.pyplot as plt
 import pickle
@@ -25,6 +26,7 @@ varied = datasets.make_blobs(
 
 
 #%%
+os.makedirs('./Distribution Datasets/2D-Distributions/Processed_Data', exist_ok = True)
 pickle.dump(noisy_moons, open('./Distribution Datasets/2D-Distributions/Processed_Data/noisy_moons_' + str(n_samples) + 'samples', 'wb'))
 pickle.dump(aniso, open('./Distribution Datasets/2D-Distributions/Processed_Data/aniso_' + str(n_samples) + 'samples', 'wb'))
 pickle.dump(varied, open('./Distribution Datasets/2D-Distributions/Processed_Data/varied_' + str(n_samples) + 'samples', 'wb'))
