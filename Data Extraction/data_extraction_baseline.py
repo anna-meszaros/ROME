@@ -84,17 +84,7 @@ def write_table(data, filename, decimal_place = 2):
             
             if len(string) == 0:
                 continue
-            # previous_string = string.split('.')[0].split('$')[-1]
-            # overwrite = False
-            # if previous_string[0] == '-':
-            #     overwrite = previous_string[1:].isnumeric()
-            # else:
-            #     overwrite = previous_string.isnumeric()
-            # if overwrite:
-            #     needed_buffer = extra_str_length - len(previous_string)  
-            #     if needed_buffer > 0:
-            #         Str_parts[idx] = string[:16] + r'\hphantom{' + '0' * needed_buffer + r'}' + string[16:]
-            
+
             # Check for too long stds
             string_parts = Str_parts[idx].split('^')
             if len(string_parts) > 1 and 'hphantom' not in string_parts[1]:
@@ -127,14 +117,16 @@ def write_table(data, filename, decimal_place = 2):
 
 # List of random seeds
 random_seeds = [
-                ['0','100']]
-
-# list of ablation keys
-ablation_keys = ['config_cluster_PCA_stdKDE',
-                 'MP_Windows',
-                 'MPS_Windows',
-                 'MPK_Windows',
-                 'KDevine']
+                ['0','10'],
+                ['10','20'],
+                ['20','30'],
+                ['30','40'],
+                ['40','50'],
+                ['50','60'],
+                ['60','70'],
+                ['70','80'],
+                ['80','90'],
+                ['90','100']]
 
 # list of ablation keys
 ablation_keys = ['config_cluster_PCA_stdKDE',
@@ -142,21 +134,10 @@ ablation_keys = ['config_cluster_PCA_stdKDE',
                  'KDevine']
 
 # list of dataset keys
-dataset_keys = ['noisy_moons_n_samples_200',
-                'varied_n_samples_200',
-                'aniso_n_samples_200',
-                'Trajectories_n_samples_200',
-                'noisy_moons_n_samples_600',
-                'varied_n_samples_600',
-                'aniso_n_samples_600',
-                'Trajectories_n_samples_600',
-                'noisy_moons_n_samples_2000',
-                'varied_n_samples_2000',
-                'aniso_n_samples_2000',
-                'Trajectories_n_samples_2000',
-                'noisy_moons_n_samples_6000',
-                'varied_n_samples_6000',
+dataset_keys = [
                 'aniso_n_samples_6000',
+                'varied_n_samples_6000',
+                'noisy_moons_n_samples_6000',
                 'Trajectories_n_samples_6000'
                 ]
 
@@ -236,16 +217,12 @@ if use_small_traj_std:
 
 Results = Results.reshape((-1, 6, *Results.shape[1:]))
 
-# Remove the unneeded datasets
-datasets_used = [4, 3, 0, 5]
-Results = Results[:, datasets_used]
-
 #%% Write tables
 # Use results from 3000 samples only
 Data = Results[-1, :, :, :, :]
 
 # Collapse models and metrics
-Data = Data.transpose(0,2,1,3).reshape((len(datasets_used), 9, 100))
+Data = Data.transpose(0,2,1,3).reshape((4, 9, 100))
 filename = '../Tables/baseline_20000.tex'
 
 write_table(Data, filename, 2)

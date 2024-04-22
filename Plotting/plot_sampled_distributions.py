@@ -30,7 +30,16 @@ sampled_dict = {}
 
 
 random_seeds = [
-                ['0','100']
+                ['0','10'],
+                ['10','20'],
+                ['20','30'],
+                ['30','40'],
+                ['40','50'],
+                ['50','60'],
+                ['60','70'],
+                ['70','80'],
+                ['80','90'],
+                ['90','100']
                 ]
 
 # loop through all results files and save to corresponding dictionaries
@@ -76,6 +85,7 @@ for i in range(100):
     varied_KDE_samples = []
     aniso_KDE_samples = []
     twoMoons_KDE_samples = []
+    aniso_VC_samples = []
 
 
     varied_fittigData = []
@@ -253,6 +263,14 @@ for i in range(100):
         print('try 16')
         print('error occured in retrieving samples for rnd_seed_'+str(i))
         continue
+    try:
+        np.random.shuffle(sampled_dict['aniso_n_samples_6000_rnd_seed_'+str(i)+'_KDevine'])
+        data = sampled_dict['aniso_n_samples_6000_rnd_seed_'+str(i)+'_KDevine']
+        aniso_VC_samples.append(data)
+    except:
+        print('try 20')
+        print('error occured in retrieving samples for rnd_seed_'+str(i))
+        continue
 
     varied_fittigData.append(fitting_dict['varied_n_samples_6000_rnd_seed_'+str(i)])
     trajectories_fittingData.append(fitting_dict['Trajectories_n_samples_6000_rnd_seed_'+str(i)])
@@ -279,6 +297,7 @@ aniso_KDE_cluster_samples = aniso_KDE_cluster_samples[0]
 aniso_KDE_PCA_std_samples = aniso_KDE_PCA_std_samples[0]
 aniso_MPW_samples = aniso_MPW_samples[0]
 aniso_KDE_samples = aniso_KDE_samples[0]
+aniso_VC_samples = aniso_VC_samples[0]
 
 trajectories_MPW_samples = trajectories_MPW_samples[0]
 trajectories_VC_samples = trajectories_VC_samples[0]
@@ -297,301 +316,482 @@ aniso_fittingData = aniso_fittingData[0]
 
 #%%
 
-# Plot varied_MPW_samples
-name = 'Varied'
-print('Extracting ' + name)
-# Get data
-data = varied_fittigData
+# # Plot varied_MPW_samples
+# name = 'Varied'
+# print('Extracting ' + name)
+# # Get data
+# data = varied_fittigData
 
-# Get clusters
-print('Clustering ' + name)
-Optics = OPTICS_GMM().fit(data)
-cluster = Optics.cluster_labels 
+# # Get clusters
+# print('Clustering ' + name)
+# Optics = OPTICS_GMM().fit(data)
+# cluster = Optics.cluster_labels 
+
+# # # Get colors
+# colors = sns.color_palette("husl", 3)
+
+# # Plot
+# print('Plotting ' + name)
+# fig = plt.figure(i, figsize=(3, 3))
+# # plt.scatter(data[:, 0], data[:, 1], s=0.5, c=data_colors, alpha=0.9)
+# plt.scatter(data[:, 0], data[:, 1], s=0.5, alpha=0.9, c=colors[2])
+# plt.scatter(varied_MPW_samples[:, 0], varied_MPW_samples[:, 1], s=0.5, alpha=0.9, c=colors[0])
+# # plt.set_title(name)
+# plt.axis('equal')
+# plt.xticks([])
+# plt.yticks([])
+# plt.gca().spines['top'].set_visible(False)
+# plt.gca().spines['right'].set_visible(False)
+# plt.gca().spines['left'].set_visible(False)
+# plt.gca().spines['bottom'].set_visible(False)
+
+# plt.show()
+
+# # Save figure as pdf
+# fig.savefig('./Distribution Datasets/2D-Distributions/Plots/varied_MPW_samples.svg', bbox_inches='tight')
+# plt.close()
+
+# # Plot varied_VC_samples
+
+# # Get clusters
+# print('Clustering ' + name)
+# Optics = OPTICS_GMM().fit(data)
+# cluster = Optics.cluster_labels 
 
 # # Get colors
-colors = sns.color_palette("husl", 3)
 
-# Plot
-print('Plotting ' + name)
-fig = plt.figure(i, figsize=(3, 3))
-# plt.scatter(data[:, 0], data[:, 1], s=0.5, c=data_colors, alpha=0.9)
-plt.scatter(data[:, 0], data[:, 1], s=0.5, alpha=0.9, c=colors[2])
-plt.scatter(varied_MPW_samples[:, 0], varied_MPW_samples[:, 1], s=0.5, alpha=0.9, c=colors[0])
-# plt.set_title(name)
-plt.axis('equal')
-plt.xticks([])
-plt.yticks([])
-plt.gca().spines['top'].set_visible(False)
-plt.gca().spines['right'].set_visible(False)
-plt.gca().spines['left'].set_visible(False)
-plt.gca().spines['bottom'].set_visible(False)
+# # Plot
+# print('Plotting ' + name)
+# fig = plt.figure(i, figsize=(3, 3))
+# # plt.scatter(data[:, 0], data[:, 1], s=0.5, c=data_colors, alpha=0.9)
+# plt.scatter(data[:, 0], data[:, 1], s=0.5, alpha=0.9, c=colors[2])
+# plt.scatter(varied_VC_samples[:, 0], varied_VC_samples[:, 1], s=0.5, alpha=0.9, c=colors[0])
+# # plt.set_title(name)
+# plt.axis('equal')
+# plt.xticks([])
+# plt.yticks([])
+# plt.gca().spines['top'].set_visible(False)
+# plt.gca().spines['right'].set_visible(False)
+# plt.gca().spines['left'].set_visible(False)
+# plt.gca().spines['bottom'].set_visible(False)
 
-plt.show()
+# plt.show()
 
-# Save figure as pdf
-fig.savefig('./Distribution Datasets/2D-Distributions/Plots/varied_MPW_samples.svg', bbox_inches='tight')
-plt.close()
+# # Save figure as pdf
+# fig.savefig('./Distribution Datasets/2D-Distributions/Plots/varied_VC_samples.svg', bbox_inches='tight')
+# plt.close()
 
-# Plot varied_VC_samples
+# # Plot varied_ROME_samples
+# # Get clusters
+# print('Clustering ' + name)
+# Optics = OPTICS_GMM().fit(data)
+# cluster = Optics.cluster_labels 
 
-# Get clusters
-print('Clustering ' + name)
-Optics = OPTICS_GMM().fit(data)
-cluster = Optics.cluster_labels 
-
-# Get colors
-
-# Plot
-print('Plotting ' + name)
-fig = plt.figure(i, figsize=(3, 3))
-# plt.scatter(data[:, 0], data[:, 1], s=0.5, c=data_colors, alpha=0.9)
-plt.scatter(data[:, 0], data[:, 1], s=0.5, alpha=0.9, c=colors[2])
-plt.scatter(varied_VC_samples[:, 0], varied_VC_samples[:, 1], s=0.5, alpha=0.9, c=colors[0])
-# plt.set_title(name)
-plt.axis('equal')
-plt.xticks([])
-plt.yticks([])
-plt.gca().spines['top'].set_visible(False)
-plt.gca().spines['right'].set_visible(False)
-plt.gca().spines['left'].set_visible(False)
-plt.gca().spines['bottom'].set_visible(False)
-
-plt.show()
-
-# Save figure as pdf
-fig.savefig('./Distribution Datasets/2D-Distributions/Plots/varied_VC_samples.svg', bbox_inches='tight')
-plt.close()
-
-# Plot varied_ROME_samples
-# Get clusters
-print('Clustering ' + name)
-Optics = OPTICS_GMM().fit(data)
-cluster = Optics.cluster_labels 
-
-# Get colors
+# # Get colors
 
 
-# Plot
-print('Plotting ' + name)
-fig = plt.figure(i, figsize=(3, 3))
-# plt.scatter(data[:, 0], data[:, 1], s=0.5, c=data_colors, alpha=0.9)
-plt.scatter(data[:, 0], data[:, 1], s=0.5, alpha=0.9, c=colors[2])
-plt.scatter(varied_ROME_samples[:, 0], varied_ROME_samples[:, 1], s=0.5, alpha=0.9, c=colors[0])
-# plt.set_title(name)
-plt.axis('equal')
-plt.xticks([])
-plt.yticks([])
-plt.gca().spines['top'].set_visible(False)
-plt.gca().spines['right'].set_visible(False)
-plt.gca().spines['left'].set_visible(False)
-plt.gca().spines['bottom'].set_visible(False)
+# # Plot
+# print('Plotting ' + name)
+# fig = plt.figure(i, figsize=(3, 3))
+# # plt.scatter(data[:, 0], data[:, 1], s=0.5, c=data_colors, alpha=0.9)
+# plt.scatter(data[:, 0], data[:, 1], s=0.5, alpha=0.9, c=colors[2])
+# plt.scatter(varied_ROME_samples[:, 0], varied_ROME_samples[:, 1], s=0.5, alpha=0.9, c=colors[0])
+# # plt.set_title(name)
+# plt.axis('equal')
+# plt.xticks([])
+# plt.yticks([])
+# plt.gca().spines['top'].set_visible(False)
+# plt.gca().spines['right'].set_visible(False)
+# plt.gca().spines['left'].set_visible(False)
+# plt.gca().spines['bottom'].set_visible(False)
 
-plt.show()
+# plt.show()
 
-# Save figure as pdf
-fig.savefig('./Distribution Datasets/2D-Distributions/Plots/varied_ROME_samples.svg', bbox_inches='tight')
-plt.close()
+# # Save figure as pdf
+# fig.savefig('./Distribution Datasets/2D-Distributions/Plots/varied_ROME_samples.svg', bbox_inches='tight')
+# plt.close()
 
-# Plot varied_KDE_samples
-# Get clusters
-print('Clustering ' + name)
-Optics = OPTICS_GMM().fit(data)
-cluster = Optics.cluster_labels 
+# # Plot varied_KDE_samples
+# # Get clusters
+# print('Clustering ' + name)
+# Optics = OPTICS_GMM().fit(data)
+# cluster = Optics.cluster_labels 
 
-# Get colors
-
-
-# Plot
-print('Plotting ' + name)
-fig = plt.figure(i, figsize=(3, 3))
-# plt.scatter(data[:, 0], data[:, 1], s=0.5, c=data_colors, alpha=0.9)
-plt.scatter(data[:, 0], data[:, 1], s=0.5, alpha=0.9, c=colors[2])
-plt.scatter(varied_KDE_samples[:, 0], varied_KDE_samples[:, 1], s=0.5, alpha=0.9, c=colors[0])
-# plt.set_title(name)
-plt.axis('equal')
-plt.xticks([])
-plt.yticks([])
-plt.gca().spines['top'].set_visible(False)
-plt.gca().spines['right'].set_visible(False)
-plt.gca().spines['left'].set_visible(False)
-plt.gca().spines['bottom'].set_visible(False)
-
-plt.show()
-
-# Save figure as pdf
-fig.savefig('./Distribution Datasets/2D-Distributions/Plots/varied_KDE_samples.svg', bbox_inches='tight')
-plt.close()
+# # Get colors
 
 
-# Plot varied_KDE_PCA_std_samples
-# Get clusters
-print('Clustering ' + name)
-Optics = OPTICS_GMM().fit(data)
-cluster = Optics.cluster_labels 
+# # Plot
+# print('Plotting ' + name)
+# fig = plt.figure(i, figsize=(3, 3))
+# # plt.scatter(data[:, 0], data[:, 1], s=0.5, c=data_colors, alpha=0.9)
+# plt.scatter(data[:, 0], data[:, 1], s=0.5, alpha=0.9, c=colors[2])
+# plt.scatter(varied_KDE_samples[:, 0], varied_KDE_samples[:, 1], s=0.5, alpha=0.9, c=colors[0])
+# # plt.set_title(name)
+# plt.axis('equal')
+# plt.xticks([])
+# plt.yticks([])
+# plt.gca().spines['top'].set_visible(False)
+# plt.gca().spines['right'].set_visible(False)
+# plt.gca().spines['left'].set_visible(False)
+# plt.gca().spines['bottom'].set_visible(False)
 
-# Get colors
-# Plot
-print('Plotting ' + name)
-fig = plt.figure(i, figsize=(3, 3))
-# plt.scatter(data[:, 0], data[:, 1], s=1, c=data_colors, alpha=0.9)
-plt.scatter(data[:, 0], data[:, 1], s=1, alpha=0.9, c=colors[2])
-plt.scatter(varied_KDE_PCA_std_samples[:, 0], varied_KDE_PCA_std_samples[:, 1], s=1, alpha=0.9, c=colors[0])
-# plt.set_title(name)
-plt.axis('equal')
-plt.xticks([])
-plt.yticks([])
-plt.gca().spines['top'].set_visible(False)
-plt.gca().spines['right'].set_visible(False)
-plt.gca().spines['left'].set_visible(False)
-plt.gca().spines['bottom'].set_visible(False)
+# plt.show()
 
-plt.show()
-
-# Save figure as pdf
-fig.savefig('./Distribution Datasets/2D-Distributions/Plots/varied_KDE_PCA_std_samples.svg', bbox_inches='tight')
+# # Save figure as pdf
+# fig.savefig('./Distribution Datasets/2D-Distributions/Plots/varied_KDE_samples.svg', bbox_inches='tight')
+# plt.close()
 
 
-# Plot twoMoons_GMM_samples
-data = twoMoons_fittingData
+# # Plot varied_KDE_PCA_std_samples
+# # Get clusters
+# print('Clustering ' + name)
+# Optics = OPTICS_GMM().fit(data)
+# cluster = Optics.cluster_labels 
 
-# Get clusters
-name = 'Two Moons'
-print('Clustering ' + name)
-Optics = OPTICS_GMM().fit(data)
-cluster = Optics.cluster_labels 
+# # Get colors
+# # Plot
+# print('Plotting ' + name)
+# fig = plt.figure(i, figsize=(3, 3))
+# # plt.scatter(data[:, 0], data[:, 1], s=1, c=data_colors, alpha=0.9)
+# plt.scatter(data[:, 0], data[:, 1], s=1, alpha=0.9, c=colors[2])
+# plt.scatter(varied_KDE_PCA_std_samples[:, 0], varied_KDE_PCA_std_samples[:, 1], s=1, alpha=0.9, c=colors[0])
+# # plt.set_title(name)
+# plt.axis('equal')
+# plt.xticks([])
+# plt.yticks([])
+# plt.gca().spines['top'].set_visible(False)
+# plt.gca().spines['right'].set_visible(False)
+# plt.gca().spines['left'].set_visible(False)
+# plt.gca().spines['bottom'].set_visible(False)
 
-# Get colors
+# plt.show()
 
-
-# Plot
-print('Plotting ' + name)
-fig = plt.figure(i, figsize=(3, 3))
-# plt.scatter(data[:, 0], data[:, 1], s=0.5, c=data_colors, alpha=0.9)
-plt.scatter(data[:, 0], data[:, 1], s=0.5, alpha=0.9, c=colors[2])
-plt.scatter(twoMoons_GMM_samples[:, 0], twoMoons_GMM_samples[:, 1], s=0.5, alpha=0.9, c=colors[0])
-# plt.set_title(name)
-plt.axis('equal')
-plt.xticks([])
-plt.yticks([])
-plt.gca().spines['top'].set_visible(False)
-plt.gca().spines['right'].set_visible(False)
-plt.gca().spines['left'].set_visible(False)
-plt.gca().spines['bottom'].set_visible(False)
-
-plt.show()
-
-# Save figure as pdf
-fig.savefig('./Distribution Datasets/2D-Distributions/Plots/twoMoons_GMM_samples.svg', bbox_inches='tight')
-plt.close()
-
-# Plot twoMoons_ROME_samples
-# Get clusters
-print('Clustering ' + name)
-Optics = OPTICS_GMM().fit(data)
-cluster = Optics.cluster_labels 
-
-# Get colors
+# # Save figure as pdf
+# fig.savefig('./Distribution Datasets/2D-Distributions/Plots/varied_KDE_PCA_std_samples.svg', bbox_inches='tight')
 
 
-# Plot
-print('Plotting ' + name)
-fig = plt.figure(i, figsize=(3, 3))
-# plt.scatter(data[:, 0], data[:, 1], s=0.5, c=data_colors, alpha=0.9)
-plt.scatter(data[:, 0], data[:, 1], s=0.5, alpha=0.9, c=colors[2])
-plt.scatter(twoMoons_ROME_samples[:, 0], twoMoons_ROME_samples[:, 1], s=0.5, alpha=0.9, c=colors[0])
-# plt.set_title(name)
-plt.axis('equal')
-plt.xticks([])
-plt.yticks([])
-plt.gca().spines['top'].set_visible(False)
-plt.gca().spines['right'].set_visible(False)
-plt.gca().spines['left'].set_visible(False)
-plt.gca().spines['bottom'].set_visible(False)
+# # Plot twoMoons_GMM_samples
+# data = twoMoons_fittingData
 
-plt.show()
+# # Get clusters
+# name = 'Two Moons'
+# print('Clustering ' + name)
+# Optics = OPTICS_GMM().fit(data)
+# cluster = Optics.cluster_labels 
 
-# Save figure as pdf
-fig.savefig('./Distribution Datasets/2D-Distributions/Plots/twoMoons_ROME_samples.svg', bbox_inches='tight')
-plt.close()
-
-# Plot twoMoons_KDE_cluster_samples
-# Get clusters
-print('Clustering ' + name)
-Optics = OPTICS_GMM().fit(data)
-cluster = Optics.cluster_labels 
-
-# Get colors
+# # Get colors
 
 
-# Plot
-print('Plotting ' + name)
-fig = plt.figure(i, figsize=(3, 3))
-# plt.scatter(data[:, 0], data[:, 1], s=0.5, c=data_colors, alpha=0.9)
-plt.scatter(data[:, 0], data[:, 1], s=0.5, alpha=0.9, c=colors[2])
-plt.scatter(twoMoons_KDE_cluster_samples[:, 0], twoMoons_KDE_cluster_samples[:, 1], s=0.5, alpha=0.9, c=colors[0])
-# plt.set_title(name)
-plt.axis('equal')
-plt.xticks([])
-plt.yticks([])
-plt.gca().spines['top'].set_visible(False)
-plt.gca().spines['right'].set_visible(False)
-plt.gca().spines['left'].set_visible(False)
-plt.gca().spines['bottom'].set_visible(False)
+# # Plot
+# print('Plotting ' + name)
+# fig = plt.figure(i, figsize=(3, 3))
+# # plt.scatter(data[:, 0], data[:, 1], s=0.5, c=data_colors, alpha=0.9)
+# plt.scatter(data[:, 0], data[:, 1], s=0.5, alpha=0.9, c=colors[2])
+# plt.scatter(twoMoons_GMM_samples[:, 0], twoMoons_GMM_samples[:, 1], s=0.5, alpha=0.9, c=colors[0])
+# # plt.set_title(name)
+# plt.axis('equal')
+# plt.xticks([])
+# plt.yticks([])
+# plt.gca().spines['top'].set_visible(False)
+# plt.gca().spines['right'].set_visible(False)
+# plt.gca().spines['left'].set_visible(False)
+# plt.gca().spines['bottom'].set_visible(False)
 
-plt.show()
+# plt.show()
 
-# Save figure as pdf
-fig.savefig('./Distribution Datasets/2D-Distributions/Plots/twoMoons_KDE_cluster_samples.svg', bbox_inches='tight')
-plt.close()
+# # Save figure as pdf
+# fig.savefig('./Distribution Datasets/2D-Distributions/Plots/twoMoons_GMM_samples.svg', bbox_inches='tight')
+# plt.close()
 
-# Plot twoMoons_KDE_samples
-# Get clusters
-print('Clustering ' + name)
-Optics = OPTICS_GMM().fit(data)
-cluster = Optics.cluster_labels 
+# # Plot twoMoons_ROME_samples
+# # Get clusters
+# print('Clustering ' + name)
+# Optics = OPTICS_GMM().fit(data)
+# cluster = Optics.cluster_labels 
 
-# Get colors
+# # Get colors
 
 
-# Plot
-print('Plotting ' + name)
-fig = plt.figure(i, figsize=(3, 3))
-# plt.scatter(data[:, 0], data[:, 1], s=0.5, c=data_colors, alpha=0.9)
-plt.scatter(data[:, 0], data[:, 1], s=0.5, alpha=0.9, c=colors[2])
-plt.scatter(twoMoons_KDE_samples[:, 0], twoMoons_KDE_samples[:, 1], s=0.5, alpha=0.9, c=colors[0])
-# plt.set_title(name)
-plt.axis('equal')
-plt.xticks([])
-plt.yticks([])
-plt.gca().spines['top'].set_visible(False)
-plt.gca().spines['right'].set_visible(False)
-plt.gca().spines['left'].set_visible(False)
-plt.gca().spines['bottom'].set_visible(False)
+# # Plot
+# print('Plotting ' + name)
+# fig = plt.figure(i, figsize=(3, 3))
+# # plt.scatter(data[:, 0], data[:, 1], s=0.5, c=data_colors, alpha=0.9)
+# plt.scatter(data[:, 0], data[:, 1], s=0.5, alpha=0.9, c=colors[2])
+# plt.scatter(twoMoons_ROME_samples[:, 0], twoMoons_ROME_samples[:, 1], s=0.5, alpha=0.9, c=colors[0])
+# # plt.set_title(name)
+# plt.axis('equal')
+# plt.xticks([])
+# plt.yticks([])
+# plt.gca().spines['top'].set_visible(False)
+# plt.gca().spines['right'].set_visible(False)
+# plt.gca().spines['left'].set_visible(False)
+# plt.gca().spines['bottom'].set_visible(False)
 
-plt.show()
+# plt.show()
 
-# Save figure as pdf
-fig.savefig('./Distribution Datasets/2D-Distributions/Plots/twoMoons_KDE_samples.svg', bbox_inches='tight')
-plt.close()
+# # Save figure as pdf
+# fig.savefig('./Distribution Datasets/2D-Distributions/Plots/twoMoons_ROME_samples.svg', bbox_inches='tight')
+# plt.close()
 
-# Plot aniso_ROME_samples
-data = aniso_fittingData
+# # Plot twoMoons_KDE_cluster_samples
+# # Get clusters
+# print('Clustering ' + name)
+# Optics = OPTICS_GMM().fit(data)
+# cluster = Optics.cluster_labels 
+
+# # Get colors
+
+
+# # Plot
+# print('Plotting ' + name)
+# fig = plt.figure(i, figsize=(3, 3))
+# # plt.scatter(data[:, 0], data[:, 1], s=0.5, c=data_colors, alpha=0.9)
+# plt.scatter(data[:, 0], data[:, 1], s=0.5, alpha=0.9, c=colors[2])
+# plt.scatter(twoMoons_KDE_cluster_samples[:, 0], twoMoons_KDE_cluster_samples[:, 1], s=0.5, alpha=0.9, c=colors[0])
+# # plt.set_title(name)
+# plt.axis('equal')
+# plt.xticks([])
+# plt.yticks([])
+# plt.gca().spines['top'].set_visible(False)
+# plt.gca().spines['right'].set_visible(False)
+# plt.gca().spines['left'].set_visible(False)
+# plt.gca().spines['bottom'].set_visible(False)
+
+# plt.show()
+
+# # Save figure as pdf
+# fig.savefig('./Distribution Datasets/2D-Distributions/Plots/twoMoons_KDE_cluster_samples.svg', bbox_inches='tight')
+# plt.close()
+
+# # Plot twoMoons_KDE_samples
+# # Get clusters
+# print('Clustering ' + name)
+# Optics = OPTICS_GMM().fit(data)
+# cluster = Optics.cluster_labels 
+
+# # Get colors
+
+
+# # Plot
+# print('Plotting ' + name)
+# fig = plt.figure(i, figsize=(3, 3))
+# # plt.scatter(data[:, 0], data[:, 1], s=0.5, c=data_colors, alpha=0.9)
+# plt.scatter(data[:, 0], data[:, 1], s=0.5, alpha=0.9, c=colors[2])
+# plt.scatter(twoMoons_KDE_samples[:, 0], twoMoons_KDE_samples[:, 1], s=0.5, alpha=0.9, c=colors[0])
+# # plt.set_title(name)
+# plt.axis('equal')
+# plt.xticks([])
+# plt.yticks([])
+# plt.gca().spines['top'].set_visible(False)
+# plt.gca().spines['right'].set_visible(False)
+# plt.gca().spines['left'].set_visible(False)
+# plt.gca().spines['bottom'].set_visible(False)
+
+# plt.show()
+
+# # Save figure as pdf
+# fig.savefig('./Distribution Datasets/2D-Distributions/Plots/twoMoons_KDE_samples.svg', bbox_inches='tight')
+# plt.close()
+
+# # Plot aniso_ROME_samples
+# data = aniso_fittingData
+
+# # Get clusters
+# name = 'Aniso'
+# print('Clustering ' + name)
+# Optics = OPTICS_GMM().fit(data)
+# cluster = Optics.cluster_labels 
+
+# # Get colors
+
+
+# # Plot
+# print('Plotting ' + name)
+# fig = plt.figure(i, figsize=(3, 3))
+# # plt.scatter(data[:, 0], data[:, 1], s=0.5, c=data_colors, alpha=0.9)
+# plt.scatter(data[:, 0], data[:, 1], s=0.5, alpha=0.9, c=colors[2])
+# plt.scatter(aniso_ROME_samples[:, 0], aniso_ROME_samples[:, 1], s=0.5, alpha=0.9, c=colors[0])
+# # plt.set_title(name)
+# plt.axis('equal')
+# plt.xticks([])
+# plt.yticks([])
+# plt.gca().spines['top'].set_visible(False)
+# plt.gca().spines['right'].set_visible(False)
+# plt.gca().spines['left'].set_visible(False)
+# plt.gca().spines['bottom'].set_visible(False)
+
+# plt.show()
+
+# # Save figure as pdf
+# fig.savefig('./Distribution Datasets/2D-Distributions/Plots/aniso_ROME_samples.svg', bbox_inches='tight')
+# plt.close()
+
+# # Plot aniso_KDE_cluster_std_samples
+# # Get clusters
+# print('Clustering ' + name)
+# Optics = OPTICS_GMM().fit(data)
+# cluster = Optics.cluster_labels 
+
+# # Get colors
+
+
+# # Plot
+# print('Plotting ' + name)
+# fig = plt.figure(i, figsize=(3, 3))
+# # plt.scatter(data[:, 0], data[:, 1], s=0.5, c=data_colors, alpha=0.9)
+# plt.scatter(data[:, 0], data[:, 1], s=0.5, alpha=0.9, c=colors[2])
+# plt.scatter(aniso_KDE_cluster_std_samples[:, 0], aniso_KDE_cluster_std_samples[:, 1], s=0.5, alpha=0.9, c=colors[0])
+# # plt.set_title(name)
+# plt.axis('equal')
+# plt.xticks([])
+# plt.yticks([])
+# plt.gca().spines['top'].set_visible(False)
+# plt.gca().spines['right'].set_visible(False)
+# plt.gca().spines['left'].set_visible(False)
+# plt.gca().spines['bottom'].set_visible(False)
+
+# plt.show()
+
+# # Save figure as pdf
+# fig.savefig('./Distribution Datasets/2D-Distributions/Plots/aniso_KDE_cluster_std_samples.svg', bbox_inches='tight')
+# plt.close()
+
+# # Plot aniso_KDE_cluster_samples
+# # Get clusters
+# print('Clustering ' + name)
+# Optics = OPTICS_GMM().fit(data)
+# cluster = Optics.cluster_labels 
+
+# # Get colors
+
+
+# # Plot
+# print('Plotting ' + name)
+# fig = plt.figure(i, figsize=(3, 3))
+# # plt.scatter(data[:, 0], data[:, 1], s=0.5, c=data_colors, alpha=0.9)
+# plt.scatter(data[:, 0], data[:, 1], s=0.5, alpha=0.9, c=colors[2])
+# plt.scatter(aniso_KDE_cluster_samples[:, 0], aniso_KDE_cluster_samples[:, 1], s=0.5, alpha=0.9, c=colors[0])
+# # plt.set_title(name)
+# plt.axis('equal')
+# plt.xticks([])
+# plt.yticks([])
+# plt.gca().spines['top'].set_visible(False)
+# plt.gca().spines['right'].set_visible(False)
+# plt.gca().spines['left'].set_visible(False)
+# plt.gca().spines['bottom'].set_visible(False)
+
+# plt.show()
+
+# # Save figure as pdf
+# fig.savefig('./Distribution Datasets/2D-Distributions/Plots/aniso_KDE_cluster_samples.svg', bbox_inches='tight')
+# plt.close()
+
+# # Plot aniso_MPW_samples
+# # Get clusters
+# print('Clustering ' + name)
+# Optics = OPTICS_GMM().fit(data)
+# cluster = Optics.cluster_labels 
+
+# # Get colors
+
+# # Plot aniso_KDE_PCA_std_samples
+# # Get clusters
+# print('Clustering ' + name)
+# Optics = OPTICS_GMM().fit(data)
+# cluster = Optics.cluster_labels 
+
+# # Plot
+# print('Plotting ' + name)
+# fig = plt.figure(i, figsize=(3, 3))
+# # plt.scatter(data[:, 0], data[:, 1], s=1, c=data_colors, alpha=0.9)
+# plt.scatter(data[:, 0], data[:, 1], s=1, alpha=0.9, c=colors[2])
+# plt.scatter(aniso_KDE_PCA_std_samples[:, 0], aniso_KDE_PCA_std_samples[:, 1], s=1, alpha=0.9, c=colors[0])
+# # plt.set_title(name)
+# plt.axis('equal')
+# plt.xticks([])
+# plt.yticks([])
+# plt.gca().spines['top'].set_visible(False)
+# plt.gca().spines['right'].set_visible(False)
+# plt.gca().spines['left'].set_visible(False)
+# plt.gca().spines['bottom'].set_visible(False)
+
+# plt.show()
+
+# # Save figure as pdf
+# fig.savefig('./Distribution Datasets/2D-Distributions/Plots/aniso_KDE_PCA_std_samples.svg', bbox_inches='tight')
+
+
+
+# # Plot
+# print('Plotting ' + name)
+# fig = plt.figure(i, figsize=(3, 3))
+# # plt.scatter(data[:, 0], data[:, 1], s=0.5, c=data_colors, alpha=0.9)
+# plt.scatter(data[:, 0], data[:, 1], s=0.5, alpha=0.9, c=colors[2])
+# plt.scatter(aniso_MPW_samples[:, 0], aniso_MPW_samples[:, 1], s=0.5, alpha=0.9, c=colors[0])
+# # plt.set_title(name)
+# plt.axis('equal')
+# plt.xticks([])
+# plt.yticks([])
+# plt.gca().spines['top'].set_visible(False)
+# plt.gca().spines['right'].set_visible(False)
+# plt.gca().spines['left'].set_visible(False)
+# plt.gca().spines['bottom'].set_visible(False)
+
+# plt.show()
+
+# # Save figure as pdf
+# fig.savefig('./Distribution Datasets/2D-Distributions/Plots/aniso_MPW_samples.svg', bbox_inches='tight')
+# plt.close()
+
+# # Plot aniso_KDE_samples
+# # Get clusters
+# print('Clustering ' + name)
+# Optics = OPTICS_GMM().fit(data)
+# cluster = Optics.cluster_labels 
+
+# # Get colors
+
+
+# # Plot
+# print('Plotting ' + name)
+# fig = plt.figure(i, figsize=(3, 3))
+# # plt.scatter(data[:, 0], data[:, 1], s=0.5, c=data_colors, alpha=0.9)
+# plt.scatter(data[:, 0], data[:, 1], s=0.5, alpha=0.9, c=colors[2])
+# plt.scatter(aniso_KDE_samples[:, 0], aniso_KDE_samples[:, 1], s=0.5, alpha=0.9, c=colors[0])
+# # plt.set_title(name)
+# plt.axis('equal')
+# plt.xticks([])
+# plt.yticks([])
+# plt.gca().spines['top'].set_visible(False)
+# plt.gca().spines['right'].set_visible(False)
+# plt.gca().spines['left'].set_visible(False)
+# plt.gca().spines['bottom'].set_visible(False)
+
+# plt.show()
+
+# # Save figure as pdf
+# fig.savefig('./Distribution Datasets/2D-Distributions/Plots/aniso_KDE_samples.svg', bbox_inches='tight')
+# plt.close()
+
+
+# Plot aniso_VC_samples
 
 # Get clusters
 name = 'Aniso'
+data = aniso_fittingData
+colors = sns.color_palette("husl", 3)
 print('Clustering ' + name)
 Optics = OPTICS_GMM().fit(data)
 cluster = Optics.cluster_labels 
 
 # Get colors
 
-
 # Plot
 print('Plotting ' + name)
 fig = plt.figure(i, figsize=(3, 3))
 # plt.scatter(data[:, 0], data[:, 1], s=0.5, c=data_colors, alpha=0.9)
 plt.scatter(data[:, 0], data[:, 1], s=0.5, alpha=0.9, c=colors[2])
-plt.scatter(aniso_ROME_samples[:, 0], aniso_ROME_samples[:, 1], s=0.5, alpha=0.9, c=colors[0])
+plt.scatter(aniso_VC_samples[:, 0], aniso_VC_samples[:, 1], s=0.5, alpha=0.9, c=colors[0])
 # plt.set_title(name)
 plt.axis('equal')
 plt.xticks([])
@@ -604,154 +804,7 @@ plt.gca().spines['bottom'].set_visible(False)
 plt.show()
 
 # Save figure as pdf
-fig.savefig('./Distribution Datasets/2D-Distributions/Plots/aniso_ROME_samples.svg', bbox_inches='tight')
-plt.close()
-
-# Plot aniso_KDE_cluster_std_samples
-# Get clusters
-print('Clustering ' + name)
-Optics = OPTICS_GMM().fit(data)
-cluster = Optics.cluster_labels 
-
-# Get colors
-
-
-# Plot
-print('Plotting ' + name)
-fig = plt.figure(i, figsize=(3, 3))
-# plt.scatter(data[:, 0], data[:, 1], s=0.5, c=data_colors, alpha=0.9)
-plt.scatter(data[:, 0], data[:, 1], s=0.5, alpha=0.9, c=colors[2])
-plt.scatter(aniso_KDE_cluster_std_samples[:, 0], aniso_KDE_cluster_std_samples[:, 1], s=0.5, alpha=0.9, c=colors[0])
-# plt.set_title(name)
-plt.axis('equal')
-plt.xticks([])
-plt.yticks([])
-plt.gca().spines['top'].set_visible(False)
-plt.gca().spines['right'].set_visible(False)
-plt.gca().spines['left'].set_visible(False)
-plt.gca().spines['bottom'].set_visible(False)
-
-plt.show()
-
-# Save figure as pdf
-fig.savefig('./Distribution Datasets/2D-Distributions/Plots/aniso_KDE_cluster_std_samples.svg', bbox_inches='tight')
-plt.close()
-
-# Plot aniso_KDE_cluster_samples
-# Get clusters
-print('Clustering ' + name)
-Optics = OPTICS_GMM().fit(data)
-cluster = Optics.cluster_labels 
-
-# Get colors
-
-
-# Plot
-print('Plotting ' + name)
-fig = plt.figure(i, figsize=(3, 3))
-# plt.scatter(data[:, 0], data[:, 1], s=0.5, c=data_colors, alpha=0.9)
-plt.scatter(data[:, 0], data[:, 1], s=0.5, alpha=0.9, c=colors[2])
-plt.scatter(aniso_KDE_cluster_samples[:, 0], aniso_KDE_cluster_samples[:, 1], s=0.5, alpha=0.9, c=colors[0])
-# plt.set_title(name)
-plt.axis('equal')
-plt.xticks([])
-plt.yticks([])
-plt.gca().spines['top'].set_visible(False)
-plt.gca().spines['right'].set_visible(False)
-plt.gca().spines['left'].set_visible(False)
-plt.gca().spines['bottom'].set_visible(False)
-
-plt.show()
-
-# Save figure as pdf
-fig.savefig('./Distribution Datasets/2D-Distributions/Plots/aniso_KDE_cluster_samples.svg', bbox_inches='tight')
-plt.close()
-
-# Plot aniso_MPW_samples
-# Get clusters
-print('Clustering ' + name)
-Optics = OPTICS_GMM().fit(data)
-cluster = Optics.cluster_labels 
-
-# Get colors
-
-# Plot aniso_KDE_PCA_std_samples
-# Get clusters
-print('Clustering ' + name)
-Optics = OPTICS_GMM().fit(data)
-cluster = Optics.cluster_labels 
-
-# Plot
-print('Plotting ' + name)
-fig = plt.figure(i, figsize=(3, 3))
-# plt.scatter(data[:, 0], data[:, 1], s=1, c=data_colors, alpha=0.9)
-plt.scatter(data[:, 0], data[:, 1], s=1, alpha=0.9, c=colors[2])
-plt.scatter(aniso_KDE_PCA_std_samples[:, 0], aniso_KDE_PCA_std_samples[:, 1], s=1, alpha=0.9, c=colors[0])
-# plt.set_title(name)
-plt.axis('equal')
-plt.xticks([])
-plt.yticks([])
-plt.gca().spines['top'].set_visible(False)
-plt.gca().spines['right'].set_visible(False)
-plt.gca().spines['left'].set_visible(False)
-plt.gca().spines['bottom'].set_visible(False)
-
-plt.show()
-
-# Save figure as pdf
-fig.savefig('./Distribution Datasets/2D-Distributions/Plots/aniso_KDE_PCA_std_samples.svg', bbox_inches='tight')
-
-
-
-# Plot
-print('Plotting ' + name)
-fig = plt.figure(i, figsize=(3, 3))
-# plt.scatter(data[:, 0], data[:, 1], s=0.5, c=data_colors, alpha=0.9)
-plt.scatter(data[:, 0], data[:, 1], s=0.5, alpha=0.9, c=colors[2])
-plt.scatter(aniso_MPW_samples[:, 0], aniso_MPW_samples[:, 1], s=0.5, alpha=0.9, c=colors[0])
-# plt.set_title(name)
-plt.axis('equal')
-plt.xticks([])
-plt.yticks([])
-plt.gca().spines['top'].set_visible(False)
-plt.gca().spines['right'].set_visible(False)
-plt.gca().spines['left'].set_visible(False)
-plt.gca().spines['bottom'].set_visible(False)
-
-plt.show()
-
-# Save figure as pdf
-fig.savefig('./Distribution Datasets/2D-Distributions/Plots/aniso_MPW_samples.svg', bbox_inches='tight')
-plt.close()
-
-# Plot aniso_KDE_samples
-# Get clusters
-print('Clustering ' + name)
-Optics = OPTICS_GMM().fit(data)
-cluster = Optics.cluster_labels 
-
-# Get colors
-
-
-# Plot
-print('Plotting ' + name)
-fig = plt.figure(i, figsize=(3, 3))
-# plt.scatter(data[:, 0], data[:, 1], s=0.5, c=data_colors, alpha=0.9)
-plt.scatter(data[:, 0], data[:, 1], s=0.5, alpha=0.9, c=colors[2])
-plt.scatter(aniso_KDE_samples[:, 0], aniso_KDE_samples[:, 1], s=0.5, alpha=0.9, c=colors[0])
-# plt.set_title(name)
-plt.axis('equal')
-plt.xticks([])
-plt.yticks([])
-plt.gca().spines['top'].set_visible(False)
-plt.gca().spines['right'].set_visible(False)
-plt.gca().spines['left'].set_visible(False)
-plt.gca().spines['bottom'].set_visible(False)
-
-plt.show()
-
-# Save figure as pdf
-fig.savefig('./Distribution Datasets/2D-Distributions/Plots/aniso_KDE_samples.svg', bbox_inches='tight')
+fig.savefig('./Distribution Datasets/2D-Distributions/Plots/aniso_VC_samples.svg', bbox_inches='tight')
 plt.close()
 
 # %%

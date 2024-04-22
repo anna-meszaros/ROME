@@ -84,17 +84,7 @@ def write_table(data, filename, decimal_place = 2):
             
             if len(string) == 0:
                 continue
-            # previous_string = string.split('.')[0].split('$')[-1]
-            # overwrite = False
-            # if previous_string[0] == '-':
-            #     overwrite = previous_string[1:].isnumeric()
-            # else:
-            #     overwrite = previous_string.isnumeric()
-            # if overwrite:
-            #     needed_buffer = extra_str_length - len(previous_string)  
-            #     if needed_buffer > 0:
-            #         Str_parts[idx] = string[:16] + r'\hphantom{' + '0' * needed_buffer + r'}' + string[16:]
-            
+
             # Check for too long stds
             string_parts = Str_parts[idx].split('^')
             if len(string_parts) > 1 and 'hphantom' not in string_parts[1]:
@@ -139,12 +129,6 @@ random_seeds = [
                 ['90','100']
                 ]
 
-# list of ablation keys
-# ablation_keys = ['config_cluster_PCA_stdKDE',
-#                  'MP_Windows',
-#                  'MPS_Windows',
-#                  'MPK_Windows',
-#                  'KDevine']
 
 # list of ablation keys
 ablation_keys = ['config_cluster_PCA_stdKDE',
@@ -153,18 +137,6 @@ ablation_keys = ['config_cluster_PCA_stdKDE',
 
 # list of dataset keys
 dataset_keys = [
-                # 'noisy_moons_n_samples_200',
-                # 'varied_n_samples_200',
-                # 'aniso_n_samples_200',
-                # 'Trajectories_n_samples_200',
-                # 'noisy_moons_n_samples_600',
-                # 'varied_n_samples_600',
-                # 'aniso_n_samples_600',
-                # 'Trajectories_n_samples_600',
-                # 'noisy_moons_n_samples_2000',
-                # 'varied_n_samples_2000',
-                # 'aniso_n_samples_2000',
-                # 'Trajectories_n_samples_2000',
                 'aniso_n_samples_6000',
                 'varied_n_samples_6000',
                 'noisy_moons_n_samples_6000',
@@ -259,10 +231,6 @@ if use_small_traj_std:
     Results[available] = Results_small[available]
 
 Results = Results.reshape((-1, 4, *Results.shape[1:]))
-
-# Remove the unneeded datasets
-# datasets_used = [4, 3, 0, 5]
-# Results = Results[:, datasets_used]
 
 #%% Write tables
 # Use results from 3000 samples only

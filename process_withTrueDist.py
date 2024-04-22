@@ -44,7 +44,7 @@ def main(random_seeds, overwrite_string = []):
     # Anisotropic
     aniso = pickle.load(open('./Distribution Datasets/2D-Distributions/Processed_Data/aniso_20000samples', 'rb'))
 
-    # Multivariate Bi-Modal Distribution obtained by augmenting recorded pedestrian trajectories
+    # Multivariate Multi-Modal Distribution obtained by augmenting recorded pedestrian trajectories
     Trajectories = pickle.load(open('./Distribution Datasets/Forking_Paths/Processed_Data/trajectories_20000samples', 'rb'))
     Trajectories = Trajectories.reshape(len(Trajectories), Trajectories.shape[1]*Trajectories.shape[2])
 

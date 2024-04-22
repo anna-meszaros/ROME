@@ -106,7 +106,16 @@ def write_tables(data, filename, decimal_place = 2):
 
 # List of random seeds
 random_seeds = [
-                ['0','100']]
+                ['0','10'],
+                ['10','20'],
+                ['20','30'],
+                ['30','40'],
+                ['40','50'],
+                ['50','60'],
+                ['60','70'],
+                ['70','80'],
+                ['80','90'],
+                ['90','100']]
 
 # list of ablation keys
 ablation_keys = ['config_cluster_PCA_stdKDE',
@@ -132,22 +141,12 @@ ablation_keys = ['config_cluster_PCA_stdKDE',
                  'config_stdKNN']
 
 # list of dataset keys
-dataset_keys = ['noisy_moons_n_samples_200',
-                'varied_n_samples_200',
-                'aniso_n_samples_200',
-                'Trajectories_n_samples_200',
-                'noisy_moons_n_samples_600',
-                'varied_n_samples_600',
-                'aniso_n_samples_600',
-                'Trajectories_n_samples_600',
-                'noisy_moons_n_samples_2000',
-                'varied_n_samples_2000',
-                'aniso_n_samples_2000',
-                'Trajectories_n_samples_2000',
-                'noisy_moons_n_samples_6000',
-                'varied_n_samples_6000',
+dataset_keys = [
                 'aniso_n_samples_6000',
-                'Trajectories_n_samples_6000']
+                'varied_n_samples_6000',
+                'noisy_moons_n_samples_6000',
+                'Trajectories_n_samples_6000'
+                ]
 
 #%% Load Results
 JSD_testing = {}
@@ -223,11 +222,7 @@ if use_small_traj_std:
     available = np.isfinite(Results_small).any(-1)
     Results[available] = Results_small[available]
 
-Results = Results.reshape((-1, 6, *Results.shape[1:]))
-
-# Remove the unneeded datasets
-datasets_used = [4, 3, 0, 5]
-Results = Results[:, datasets_used]
+Results = Results.reshape((-1, 4, *Results.shape[1:]))
 
 #%% Write tables
 rows = np.array([0 if 'cluster' in key else 1 if 'DBCV' in key else 2 for key in ablation_keys])
@@ -239,21 +234,21 @@ Results = np.stack([Results[:,:,rows == row] for row in np.unique(rows)], axis =
 Results = Results[:, :, :, columns]
 
 # For one specific table:
-Results[-2,-1,:,:,0] *= 10
+Results[0,-1,:,:,0] *= 10
 
 metric_keys = ['JSD',
                'W_hat',
                'L_hat']
 
 for i in range(Results.shape[1]):
-    N_ind = -2 # Use 3000 samples only
+    N_ind = 0
     for j, metric in enumerate(metric_keys):
         data = Results[N_ind, i, :, :, j] 
         assert np.prod(data.shape[:2]) == len(ablation_keys), 'Data must have same length as ablation keys'
 
         # Get filename
-        data_keys = np.array(dataset_keys).reshape((-1, 6))[N_ind]
-        filename = '../Tables/' + metric + '_' + data_keys[datasets_used[i]] + '.tex'
+        data_keys = np.array(dataset_keys).reshape((-1, 4))[N_ind]
+        filename = '../Tables/' + metric + '_' + data_keys[i] + '.tex'
 
         if not os.path.exists(filename):
             os.makedirs(os.path.dirname(filename), exist_ok=True)

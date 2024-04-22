@@ -142,22 +142,11 @@ ablation_keys = ['config_cluster_PCA_stdKDE',
 
 # list of dataset keys
 dataset_keys = [
-                # 'noisy_moons_n_samples_200',
-                # 'varied_n_samples_200',
-                # 'aniso_n_samples_200',
-                # 'Trajectories_n_samples_200',
-                # 'noisy_moons_n_samples_600',
-                # 'varied_n_samples_600',
-                # 'aniso_n_samples_600',
-                # 'Trajectories_n_samples_600',
-                # 'noisy_moons_n_samples_2000',
-                # 'varied_n_samples_2000',
-                # 'aniso_n_samples_2000',
-                # 'Trajectories_n_samples_2000',
-                'noisy_moons_n_samples_6000',
-                'varied_n_samples_6000',
                 'aniso_n_samples_6000',
-                'Trajectories_n_samples_6000']
+                'varied_n_samples_6000',
+                'noisy_moons_n_samples_6000',
+                'Trajectories_n_samples_6000'
+                ]
 
 #%% Load Results
 JSD_testing, JSD_true = {}, {}
@@ -244,10 +233,6 @@ if use_small_traj_std:
 
 Results = Results.reshape((-1, 4, *Results.shape[1:]))
 
-# Remove the unneeded datasets
-# datasets_used = [4, 3, 0, 5]
-# Results = Results[:, datasets_used]
-
 #%% Write tables
 rows = np.array([0 if 'cluster' in key else 1 if 'DBCV' in key else 2 for key in ablation_keys])
         
@@ -266,7 +251,7 @@ metric_keys = ['JSD',
                'L_hat']
 
 for i in range(Results.shape[1]):
-    N_ind = 0# Use 3000 samples only
+    N_ind = 0
     for j, metric in enumerate(metric_keys):
         data = Results[N_ind, i, :, :, j] 
         assert np.prod(data.shape[:2]) == len(ablation_keys), 'Data must have same length as ablation keys'
