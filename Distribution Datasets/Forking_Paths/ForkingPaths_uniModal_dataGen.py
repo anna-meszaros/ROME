@@ -21,6 +21,8 @@ Path_init = []
 T_init = []
 Domain_init = []
 
+sample = 4
+
 # extract raw samples
 max_number_other = 0
 for i in range(num_tars):
@@ -76,6 +78,9 @@ Domain_init = pd.DataFrame(Domain_init)
 
 
 for i in range(len(Path_init)):
+    if i != 4:
+        continue
+
     path_init   = Path_init.iloc[i].tar
     t_init      = T_init[i]
     domain_init = Domain_init.iloc[i]
@@ -125,7 +130,7 @@ for i in range(len(Path_init)):
     s_std_ang = np.pi/180
     
     num_samples_test = 1000
-    num_samples = 3334
+    num_samples = 20000 #3334 
     
     # Prepare samples trajectories
     # Traj_new = np.zeros((0, *path_init.shape), float)
@@ -272,4 +277,4 @@ Path = pd.DataFrame(Path)
 trajectories = np.stack(Path.to_numpy().tolist()).squeeze()[:20000]
 
 # %%
-pickle.dump(trajectories, open('./Distribution Datasets/Forking_Paths/Processed_Data/trajectories_20000samples', 'wb'))
+pickle.dump(trajectories, open('./Distribution Datasets/Forking_Paths/Processed_Data/trajectoriesUniModal_20000samples', 'wb'))
