@@ -277,4 +277,5 @@ Path = pd.DataFrame(Path)
 trajectories = np.stack(Path.to_numpy().tolist()).squeeze()[:20000]
 
 # %%
+os.makedirs('./Distribution Datasets/Forking_Paths/Processed_Data', exist_ok = True)
 pickle.dump(trajectories, open('./Distribution Datasets/Forking_Paths/Processed_Data/trajectoriesUniModal_20000samples', 'wb'))

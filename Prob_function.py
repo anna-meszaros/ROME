@@ -197,7 +197,7 @@ def plot_reach(method, param, R, C, save_file):
     plt.close()
 
 
-class OPTICS_GMM():
+class ROME():
     '''
     This is a method for creating a point density invariant probability density
     function using nonparametrics methods.

@@ -6,7 +6,7 @@ import seaborn as sns
 import sys
 
 sys.path.append('../')
-from ROME.Prob_function import OPTICS_GMM
+from ROME.Prob_function import ROME
 
 #%% Load the data
 
@@ -451,7 +451,7 @@ gaussianUniMod_ROME_samples = gaussianUniMod_ROME_samples[0]
 
 # # Get clusters
 # print('Clustering ' + name)
-# Optics = OPTICS_GMM().fit(data)
+# Optics = ROME().fit(data)
 # cluster = Optics.cluster_labels 
 
 # # # Get colors
@@ -482,7 +482,7 @@ gaussianUniMod_ROME_samples = gaussianUniMod_ROME_samples[0]
 
 # # Get clusters
 # print('Clustering ' + name)
-# Optics = OPTICS_GMM().fit(data)
+# Optics = ROME().fit(data)
 # cluster = Optics.cluster_labels 
 
 # # Get colors
@@ -541,7 +541,7 @@ gaussianUniMod_ROME_samples = gaussianUniMod_ROME_samples[0]
 # # Plot varied_KDE_samples
 # # Get clusters
 # print('Clustering ' + name)
-# Optics = OPTICS_GMM().fit(data)
+# Optics = ROME().fit(data)
 # cluster = Optics.cluster_labels 
 
 # # Get colors
@@ -572,7 +572,7 @@ gaussianUniMod_ROME_samples = gaussianUniMod_ROME_samples[0]
 # # Plot varied_KDE_PCA_std_samples
 # # Get clusters
 # print('Clustering ' + name)
-# Optics = OPTICS_GMM().fit(data)
+# Optics = ROME().fit(data)
 # cluster = Optics.cluster_labels 
 
 # # Get colors
@@ -603,7 +603,7 @@ gaussianUniMod_ROME_samples = gaussianUniMod_ROME_samples[0]
 # # Get clusters
 # name = 'Two Moons'
 # print('Clustering ' + name)
-# Optics = OPTICS_GMM().fit(data)
+# Optics = ROME().fit(data)
 # cluster = Optics.cluster_labels 
 
 # # Get colors
@@ -633,7 +633,7 @@ gaussianUniMod_ROME_samples = gaussianUniMod_ROME_samples[0]
 # # Plot twoMoons_ROME_samples
 # # Get clusters
 # print('Clustering ' + name)
-# Optics = OPTICS_GMM().fit(data)
+# Optics = ROME().fit(data)
 # cluster = Optics.cluster_labels 
 
 # # Get colors
@@ -663,7 +663,7 @@ gaussianUniMod_ROME_samples = gaussianUniMod_ROME_samples[0]
 # # Plot twoMoons_KDE_cluster_samples
 # # Get clusters
 # print('Clustering ' + name)
-# Optics = OPTICS_GMM().fit(data)
+# Optics = ROME().fit(data)
 # cluster = Optics.cluster_labels 
 
 # # Get colors
@@ -693,7 +693,7 @@ gaussianUniMod_ROME_samples = gaussianUniMod_ROME_samples[0]
 # # Plot twoMoons_KDE_samples
 # # Get clusters
 # print('Clustering ' + name)
-# Optics = OPTICS_GMM().fit(data)
+# Optics = ROME().fit(data)
 # cluster = Optics.cluster_labels 
 
 # # Get colors
@@ -726,7 +726,7 @@ gaussianUniMod_ROME_samples = gaussianUniMod_ROME_samples[0]
 # # Get clusters
 # name = 'Aniso'
 # print('Clustering ' + name)
-# Optics = OPTICS_GMM().fit(data)
+# Optics = ROME().fit(data)
 # cluster = Optics.cluster_labels 
 
 # # Get colors
@@ -756,7 +756,7 @@ gaussianUniMod_ROME_samples = gaussianUniMod_ROME_samples[0]
 # # Plot aniso_KDE_cluster_std_samples
 # # Get clusters
 # print('Clustering ' + name)
-# Optics = OPTICS_GMM().fit(data)
+# Optics = ROME().fit(data)
 # cluster = Optics.cluster_labels 
 
 # # Get colors
@@ -786,7 +786,7 @@ gaussianUniMod_ROME_samples = gaussianUniMod_ROME_samples[0]
 # # Plot aniso_KDE_cluster_samples
 # # Get clusters
 # print('Clustering ' + name)
-# Optics = OPTICS_GMM().fit(data)
+# Optics = ROME().fit(data)
 # cluster = Optics.cluster_labels 
 
 # # Get colors
@@ -816,7 +816,7 @@ gaussianUniMod_ROME_samples = gaussianUniMod_ROME_samples[0]
 # # Plot aniso_MPW_samples
 # # Get clusters
 # print('Clustering ' + name)
-# Optics = OPTICS_GMM().fit(data)
+# Optics = ROME().fit(data)
 # cluster = Optics.cluster_labels 
 
 # # Get colors
@@ -824,7 +824,7 @@ gaussianUniMod_ROME_samples = gaussianUniMod_ROME_samples[0]
 # # Plot aniso_KDE_PCA_std_samples
 # # Get clusters
 # print('Clustering ' + name)
-# Optics = OPTICS_GMM().fit(data)
+# Optics = ROME().fit(data)
 # cluster = Optics.cluster_labels 
 
 # # Plot
@@ -873,7 +873,7 @@ gaussianUniMod_ROME_samples = gaussianUniMod_ROME_samples[0]
 # # Plot aniso_KDE_samples
 # # Get clusters
 # print('Clustering ' + name)
-# Optics = OPTICS_GMM().fit(data)
+# Optics = ROME().fit(data)
 # cluster = Optics.cluster_labels 
 
 # # Get colors
@@ -908,7 +908,7 @@ gaussianUniMod_ROME_samples = gaussianUniMod_ROME_samples[0]
 # data = aniso_fittingData
 # colors = sns.color_palette("husl", 3)
 # print('Clustering ' + name)
-# Optics = OPTICS_GMM().fit(data)
+# Optics = ROME().fit(data)
 # cluster = Optics.cluster_labels 
 
 # # Get colors

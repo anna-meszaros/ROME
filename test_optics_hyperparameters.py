@@ -125,7 +125,7 @@ def main():
 
             print('Fit distribution for ' + pf_key, flush = True) 
 
-            distr_mdl = pf.OPTICS_GMM(use_cluster=config[0], use_PCA=config[1],
+            distr_mdl = pf.ROME(use_cluster=config[0], use_PCA=config[1],
                                       use_std=config[2], estimator=config[3], 
                                       min_std=min_std)
 
