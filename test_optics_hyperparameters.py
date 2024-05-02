@@ -28,6 +28,7 @@ def plot_cluster_results(samples, labels, plot_file):
     os.makedirs(os.path.dirname(plot_file), exist_ok = True)
     fig.savefig(plot_file + '.pdf', bbox_inches='tight')
     fig.savefig(plot_file + '.svg', bbox_inches='tight')
+    fig.savefig(plot_file + '.png', bbox_inches='tight')
     plt.clf()
     plt.close()
 
@@ -49,6 +50,7 @@ def plot_trajectory_cluster_results(samples, labels, plot_file):
     os.makedirs(os.path.dirname(plot_file), exist_ok = True)
     fig.savefig(plot_file + '.pdf', bbox_inches='tight')
     fig.savefig(plot_file + '.svg', bbox_inches='tight')
+    fig.savefig(plot_file + '.png', bbox_inches='tight')
     plt.clf()
     plt.close()
 
@@ -130,7 +132,7 @@ def main():
             reach_file_plot = './Hyperparameter_test/Plots/Reachibility/' + pf_key
             distr_mdl.fit(samples, plot_reach_file=reach_file_plot)
 
-            cluster_plot = './Hyperparameter_test/Plots/Clusters/' + pf_key + '_cluster_plot.pdf'
+            cluster_plot = './Hyperparameter_test/Plots/Clusters/' + pf_key + '_cluster_plot'
 
             labels = distr_mdl.cluster_labels
 

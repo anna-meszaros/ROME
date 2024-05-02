@@ -1,4 +1,5 @@
 import numpy as np
+import os
 from sklearn.cluster import OPTICS
 from sklearn.metrics import silhouette_score
 from sklearn.cluster._optics import cluster_optics_dbscan, cluster_optics_xi
@@ -189,6 +190,7 @@ def plot_reach(method, param, R, C, save_file):
     plt.xlim([0, len(R) - 1])
     plt.ylim([0, 1.05 * R[0]])
     
+    os.makedirs(os.path.dirname(save_file), exist_ok = True)
     fig.savefig(save_file + '.pdf', bbox_inches='tight')
     fig.savefig(save_file + '.svg', bbox_inches='tight')
     plt.clf()
