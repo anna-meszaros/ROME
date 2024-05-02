@@ -6,7 +6,9 @@ In order to run the experiments underlying the publication, run `Prob_func_eval.
 
 ## Data Extraction
 
-In order to read the results in a tabular form, run `data_extraction_baseline.py` for the baselines Manifold Parzen Windows<sup>[1]</sup> and Vine Copulas<sup>[2]</sup>, and `data_extraction.py` for the ablation studies.
+In order to read the results for the multi-modal distributions in a tabular form, run `data_extraction_baseline.py` for the baselines Manifold Parzen Windows<sup>[1]</sup> and Vine Copulas<sup>[2]</sup>, and `data_extraction.py` for the ablation studies.
+
+In order to do the same for the uni-modal distributions, run `data_extraction_baseline_uniModal.py` for the baselines, and `data_extraction_uniModal.py` for the ablation studies.
 
 ## Plotting
 
