@@ -143,14 +143,14 @@ ablation_keys = ['config_cluster_PCA_stdKDE',
 
 # list of dataset keys
 dataset_keys = [
-                'aniso_n_samples_6000',
-                'varied_n_samples_6000',
-                'noisy_moons_n_samples_6000',
-                'Trajectories_n_samples_6000'
+                'stdNormal_n_samples_6000',
+                'elliptical_n_samples_6000',
+                'rotEllip_n_samples_6000',
+                'uniModTraj_n_samples_6000'
                 ]
 
 #%% Load Results
-JSD_testing = {}
+JSD_testing, JSD_true = {}, {}
 Wasserstein_data_fitting_testing, Wasserstein_data_fitting_sampled = {}, {}
 
 fitting_pf_testing_log_likelihood = {}
@@ -158,45 +158,54 @@ fitting_pf_testing_log_likelihood = {}
 # loop through all results files and save to corresponding dictionaries
 for rndSeed in random_seeds:
 
-    JSD_testing = {**JSD_testing, **pickle.load(open('./Distribution Datasets/UniModal/Results/rndSeed'+str(rndSeed[0])+str(rndSeed[1])+
+    JSD_testing = {**JSD_testing, **pickle.load(open('./Distribution Datasets/Results/rndSeed'+str(rndSeed[0])+str(rndSeed[1])+
                                                      '_JSD_testing', 'rb'))}
+    
+    JSD_true = {**JSD_true, **pickle.load(open('./Distribution Datasets/Results/rndSeed'+str(rndSeed[0])+str(rndSeed[1])+
+                                                     '_JSD_true', 'rb'))}
 
     Wasserstein_data_fitting_testing = {**Wasserstein_data_fitting_testing,
-                                        **pickle.load(open('./Distribution Datasets/UniModal/Results/rndSeed'+str(rndSeed[0])+str(rndSeed[1])+
+                                        **pickle.load(open('./Distribution Datasets/Results/rndSeed'+str(rndSeed[0])+str(rndSeed[1])+
                                                            '_Wasserstein_data_fitting_testing', 'rb'))}
     Wasserstein_data_fitting_sampled = {**Wasserstein_data_fitting_sampled,
-                                        **pickle.load(open('./Distribution Datasets/UniModal/Results/rndSeed'+str(rndSeed[0])+str(rndSeed[1])+
+                                        **pickle.load(open('./Distribution Datasets/Results/rndSeed'+str(rndSeed[0])+str(rndSeed[1])+
                                                            '_Wasserstein_data_fitting_sampled', 'rb'))}
     
     fitting_pf_testing_log_likelihood = {**fitting_pf_testing_log_likelihood,
-                                         **pickle.load(open('./Distribution Datasets/UniModal/Log_Likelihoods/rndSeed'+str(rndSeed[0])+str(rndSeed[1])+
+                                         **pickle.load(open('./Distribution Datasets/Log_Likelihoods/rndSeed'+str(rndSeed[0])+str(rndSeed[1])+
                                                             '_fitting_pf_testing_log_likelihood', 'rb'))}
 
 #%% Plotting
 # Create an array of dimensions num_datasets x num_ablations x num_metrics x num_random_seeds
 # Each element is a value of the metric for a given dataset, ablation and random seed
 # Datasets: noisy_moons, varied, aniso, Trajectories
-Results = np.ones((len(dataset_keys), len(ablation_keys), 3, 100)) * np.nan
+Results = np.ones((len(dataset_keys), len(ablation_keys), 4, 100)) * np.nan
 Results_small = Results.copy()
 
 use_small_traj_std = False
 # Fill the array with the values from the dictionaries
 for _, (k, v) in enumerate(JSD_testing.items()):
     
-    results = np.ones(3) * np.nan
+    results = np.ones(4) * np.nan
     # Get metrics from key
     if not isinstance(JSD_testing[k], str):
         results[0] = JSD_testing[k]
+
+    try:
+        if not isinstance(JSD_true[k], str):
+            results[1] = JSD_true[k]
+    except:
+        print(k + ' not in JSD_true')
     
     if k in Wasserstein_data_fitting_sampled.keys():
         if not isinstance(Wasserstein_data_fitting_sampled[k], str):
             bk = k[:re.search(r"rnd_seed_\d{1,2}", k).end()]
             Wasserstein_hat = Wasserstein_data_fitting_sampled[k] - Wasserstein_data_fitting_testing[bk]
-            results[1] = Wasserstein_hat / (Wasserstein_data_fitting_testing[bk] + 1e-4)
+            results[2] = Wasserstein_hat / (Wasserstein_data_fitting_testing[bk] + 1e-4)
     
     if k in fitting_pf_testing_log_likelihood.keys():
         if not isinstance(fitting_pf_testing_log_likelihood[k], str):
-            results[2] = np.mean(fitting_pf_testing_log_likelihood[k])
+            results[3] = np.mean(fitting_pf_testing_log_likelihood[k])
         
     # Place key in Results array
     rndSeed = int(k[re.search(r"rnd_seed_\d{1,2}", k).start():re.search(r"rnd_seed_\d{1,2}", k).end()][9:])
@@ -238,6 +247,7 @@ Results = Results[:, :, :, columns]
 Results[0,-1,:,:,0] *= 10
 
 metric_keys = ['JSD',
+               'JSD_true',
                'W_hat',
                'L_hat']
 
@@ -249,32 +259,33 @@ for i in range(Results.shape[1]):
 
         # Get filename
         data_keys = np.array(dataset_keys).reshape((-1, 4))[N_ind]
-        filename = '../Tables/' + metric + '_' + data_keys[i] + '_uniModal.tex'
+        filename = './Tables/' + metric + '_' + data_keys[i] + '_uniModal.tex'
 
         if not os.path.exists(filename):
             os.makedirs(os.path.dirname(filename), exist_ok=True)
 
-        if metric == "JSD":
+        if metric == "JSD" or metric == "JSD_true":
             decimal_place = 3
         else:
             decimal_place = 2
 
         write_tables(data, filename, decimal_place)
 
-#%% For each metric and each dataset plot the ablation results side by side
-# with the mean and quantile values as boxplots
-
-Data_aniso = Results[-1, 0,:,:,2] # get results for 3000 samples
-data_aniso_clust_kde = Data_aniso[:2, [0,2,4]]
-# Forget nan values
-data_aniso_clust_kde = data_aniso_clust_kde[:,:,np.isfinite(data_aniso_clust_kde).all((0,1))]
 
 
-# Get paired tests
-Diff = data_aniso_clust_kde[:,[0]] - data_aniso_clust_kde[:,[1,2]]
-T_paired, P_paired = sp.stats.ttest_1samp(Diff, 0, axis = -1)
 
-# Get unpaired tests
-T_unpaired, P_unpaired = sp.stats.ttest_ind(data_aniso_clust_kde[:,[0]], data_aniso_clust_kde[:,[1,2]], 
-                                            axis = -1, equal_var = False)
+# Data_gaussian = Results[-1, 0,:,:,0] # get results for 3000 samples
+# data_gaussian_clust_kde = Data_gaussian[[1], [0,2,4]]
+# data_gaussian_clust_kde = data_gaussian_clust_kde[np.newaxis,...]
+# # Forget nan values
+# data_gaussian_clust_kde = data_gaussian_clust_kde[:,:,np.isfinite(data_gaussian_clust_kde).all((0,1))]
+
+
+# # Get paired tests
+# Diff = data_gaussian_clust_kde[:,[0]] - data_gaussian_clust_kde[:,[1,2]]
+# T_paired, P_paired = sp.stats.ttest_1samp(Diff, 0, axis = -1)
+
+# # Get unpaired tests
+# T_unpaired, P_unpaired = sp.stats.ttest_ind(data_gaussian_clust_kde[:,[0]], data_gaussian_clust_kde[:,[1,2]], 
+#                                             axis = -1, equal_var = False)
 

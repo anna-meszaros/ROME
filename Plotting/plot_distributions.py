@@ -119,35 +119,78 @@ n = 3000
 
 #%%
 
-# Multivariate Bi-Modal Distribution obtained by augmenting recorded pedestrian trajectories
-print('Extracting Trajectories Uni-Modal')
-Trajectories = pickle.load(open('./Distribution Datasets/Forking_Paths/Processed_Data/trajectoriesUniModal_20000samples', 'rb'))
-# shuffle the trajectories
-np.random.shuffle(Trajectories)
-Trajectories = Trajectories[:n]
-# Figure with 1 subplot
+# # Multivariate Bi-Modal Distribution obtained by augmenting recorded pedestrian trajectories
+# print('Extracting Trajectories Uni-Modal')
+# Trajectories = pickle.load(open('./Distribution Datasets/Forking_Paths/Processed_Data/trajectoriesUniModal_20000samples', 'rb'))
+# # shuffle the trajectories
+# np.random.shuffle(Trajectories)
+# Trajectories = Trajectories[:n]
+# # Figure with 1 subplot
 
-print('Clustering Trajectories Uni-Modal')
+# print('Clustering Trajectories Uni-Modal')
 
-fig = plt.figure()
-for i in range(n):
-    plt.plot(Trajectories[i,:,0], Trajectories[i,:, 1], alpha=0.05, c='#1f77b4')
+# fig = plt.figure()
+# for i in range(n):
+#     plt.plot(Trajectories[i,:,0], Trajectories[i,:, 1], alpha=0.05, c='#1f77b4')
 
-# set axis equal
-plt.axis('equal')
+# # set axis equal
+# plt.axis('equal')
 
-# provide labels
-plt.xlim(3, 8)
-plt.ylim(4, 8.5)
-plt.gca().set_adjustable("box")
-plt.gca().spines['top'].set_visible(False)
-plt.gca().spines['right'].set_visible(False)
-plt.gca().spines['left'].set_visible(False)
-plt.gca().spines['bottom'].set_visible(False)
-plt.xticks([])
-plt.yticks([])
+# # provide labels
+# plt.xlim(3, 8)
+# plt.ylim(4, 8.5)
+# plt.gca().set_adjustable("box")
+# plt.gca().spines['top'].set_visible(False)
+# plt.gca().spines['right'].set_visible(False)
+# plt.gca().spines['left'].set_visible(False)
+# plt.gca().spines['bottom'].set_visible(False)
+# plt.xticks([])
+# plt.yticks([])
 
-plt.show()
+# plt.show()
 
-# Remove all spines
-fig.savefig('./Distribution Datasets/Forking_Paths/Plots/TrajectoriesUniModal.pdf', bbox_inches='tight')
+# # Remove all spines
+# fig.savefig('./Distribution Datasets/Forking_Paths/Plots/TrajectoriesUniModal.pdf', bbox_inches='tight')
+
+
+# Gaussian
+gaussianUniMod = pickle.load(open('./Distribution Datasets/2D-Distributions/Processed_Data/gaussianUniModal_20000samples', 'rb'))
+
+# Anisotropic
+anisoUniMod = pickle.load(open('./Distribution Datasets/2D-Distributions/Processed_Data/anisoUniModal_20000samples', 'rb'))
+
+# Anisotropic rotated
+anisoRotatedUniMod = pickle.load(open('./Distribution Datasets/2D-Distributions/Processed_Data/anisoRotatedUniModal_20000samples', 'rb'))
+
+# Datasets = {'AnisoUniModal': anisoUniMod, 'GaussianUniModal': gaussianUniMod, 'AnisoRotatedUniModal': anisoRotatedUniMod}
+Datasets = {'AnisoRotatedUniModal': anisoRotatedUniMod}
+
+#%% Plot the distributions
+n = 3000    
+# 2D-Distributions
+# Figure with 5 subplots in one line without axes
+
+
+for i, name in enumerate(Datasets):
+    print('Extracting ' + name)
+    # Get data
+    data = Datasets[name]
+    np.random.shuffle(data)
+    data = data[:n]
+
+    # Plot
+    print('Plotting ' + name)
+    fig = plt.figure(i, figsize=(3, 3))
+    plt.scatter(data[:, 0], data[:, 1], s=1, alpha=0.1)
+    plt.axis('equal')
+    plt.xticks([])
+    plt.yticks([])
+    plt.gca().spines['top'].set_visible(False)
+    plt.gca().spines['right'].set_visible(False)
+    plt.gca().spines['left'].set_visible(False)
+    plt.gca().spines['bottom'].set_visible(False)
+
+    plt.show()
+
+    # Save figure as pdf
+    fig.savefig('./Distribution Datasets/2D-Distributions/Plots/' + name + '.pdf', bbox_inches='tight')
