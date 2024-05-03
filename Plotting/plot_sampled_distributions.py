@@ -511,7 +511,7 @@ gaussianUniMod_ROME_samples = gaussianUniMod_ROME_samples[0]
 # # Plot varied_ROME_samples
 # # Get clusters
 # print('Clustering ' + name)
-# Optics = OPTICS_GMM().fit(data)
+# Optics = ROME().fit(data)
 # cluster = Optics.cluster_labels 
 
 # # Get colors

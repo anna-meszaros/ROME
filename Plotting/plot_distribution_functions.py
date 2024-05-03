@@ -8,7 +8,7 @@ import sys
 from sklearn.decomposition import PCA
 
 sys.path.append('../')
-from ROME.Prob_function import OPTICS_GMM
+from ROME.Prob_function import ROME
 
 #%% Load the data
 
@@ -44,7 +44,7 @@ for i, name in enumerate(Datasets):
     # Get clusters
     print('Clustering ' + name)
     save_file = './Distribution Datasets/2D-Distributions/Plots/' + name + '_reachability'
-    Optics = OPTICS_GMM().fit(data, plot_reach_file = save_file)
+    Optics = ROME().fit(data, plot_reach_file = save_file)
     cluster = Optics.cluster_labels 
 
     # Get colors
