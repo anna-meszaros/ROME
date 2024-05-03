@@ -27,12 +27,12 @@ rome = ROME()
 
 After initiliazing ROME, one can then call the typical functions most scikit-learn density estimators (KDE, GMM, etc.) have:
 ```
-rome = rome.fit(X, cluster=None)
-log_probs = rome.score_samples(X)
-X_new = rome.sample(num_samples = 10, random_state = 0)
+rome.fit(X, cluster=None) # fit distribution to data X
+log_probs = rome.score_samples(X) # obtain log_probs of data X according to fitted distribution
+X_new = rome.sample(num_samples = 10, random_state = 0) # generate new samples according to fitted distribution
 ```
 
-The main difference is the *cluster* parameter in the fit function. If it is not set to *None*, it can be used to skip the OPTICS based clustering and use a predifened clustering instead.
+The main difference is the *cluster* parameter in the *fit* function. If it is not set to *None*, it can be used to skip the OPTICS based clustering and use a predifened clustering instead.
 
 
 ## Changelog
