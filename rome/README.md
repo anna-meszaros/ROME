@@ -1,3 +1,6 @@
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![codestyle](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+
 # ROME
 This package implements the [Robust Multi-Modal Density Estimation](https://arxiv.org/abs/2401.10566). 
 This method is using clustering based on the OPTICS algortihm, using is to order sample points based on rechability analysis, based on which the clustering which maximizes the silhuette is selected.
