@@ -6,7 +6,7 @@ import seaborn as sns
 import sys
 
 sys.path.append('../')
-from ROME.Prob_function import OPTICS_GMM
+from ROME.Prob_function import ROME
 
 
 
@@ -41,7 +41,7 @@ n = 3000
 
 #     # Get clusters
 #     print('Clustering ' + name)
-#     Optics = OPTICS_GMM().fit(data)
+#     Optics = ROME().fit(data)
 #     cluster = Optics.cluster_labels 
 
 #     # Get colors
@@ -82,7 +82,7 @@ n = 3000
 # # Figure with 1 subplot
 
 # print('Clustering Trajectories')
-# # Optics = OPTICS_GMM().fit(Trajectories.copy().reshape(len(Trajectories), -1))
+# # Optics = ROME().fit(Trajectories.copy().reshape(len(Trajectories), -1))
 # # cluster = Optics.cluster_labels 
 
 # # # Get colors

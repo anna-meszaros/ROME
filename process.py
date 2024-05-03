@@ -236,11 +236,11 @@ def main(random_seeds, overwrite_string = []):
 
             print('Fit distribution for ' + pf_key, flush = True) 
 
-            distr_mdl = pf.OPTICS_GMM(use_cluster=config[0], use_PCA=config[1],
+            distr_mdl = pf.ROME(use_cluster=config[0], use_PCA=config[1],
                                       use_std=config[2], estimator=config[3], 
                                       min_std=min_std)
             
-            distr_mdl_test = pf.OPTICS_GMM(use_cluster=config[0], use_PCA=config[1],
+            distr_mdl_test = pf.ROME(use_cluster=config[0], use_PCA=config[1],
                                            use_std=config[2], estimator=config[3], 
                                            min_std=min_std)
 
