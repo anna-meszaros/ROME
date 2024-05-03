@@ -9,7 +9,10 @@ On each cluster, it then uses normalization and decorrelation, before fitting ap
 ROME has shown itself to be superior when dealing with multi-modal and highly corrolated distributions.
 
 ## Installation
-ROME can be installed using the simple "pip install romepy" command.
+ROME can be installed using.
+```
+pip install romepy
+```
 
 ## Usage
 Inside a script, ROME is loaded by the following command.
