@@ -24,3 +24,7 @@ X_new = rome.sample(num_samples = 10, random_state = 0)
 ```
 
 The main difference is the *cluster* parameter in the fit function. If it is not set to *None*, it can be used to skip the OPTICS based clustering and use a predifened clustering instead.
+
+
+## Changelog
+Version 0.1.0: Initial upload of romepy.
