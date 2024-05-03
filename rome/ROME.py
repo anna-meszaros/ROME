@@ -16,7 +16,7 @@ def _silhouette_multiple_clusterings(X, clusterings):
     ----------
     X: np.ndarray
         data to calculate the silhouette score for
-    
+
     clusterings: np.ndarray
         clusterings to calculate the silhouette score for
 
@@ -49,33 +49,23 @@ def _silhouette_multiple_clusterings(X, clusterings):
         test_labels = clusterings[:, i]
         num_noise_samples = (test_labels == -1).sum()
         silhouette_labels = test_labels.copy()
-        silhouette_labels[test_labels == -1] = (
-            test_labels.max() + 1 + np.arange(num_noise_samples)
-        )
+        silhouette_labels[test_labels == -1] = test_labels.max() + 1 + np.arange(num_noise_samples)
 
         # Treat noise as separate cluster
-        test_score_noise_separate = silhouette_score(
-            Dist, silhouette_labels, metric="precomputed"
-        )
-        test_score_noise_combined = silhouette_score(
-            Dist, test_labels, metric="precomputed"
-        )
+        test_score_noise_separate = silhouette_score(Dist, silhouette_labels, metric="precomputed")
+        test_score_noise_combined = silhouette_score(Dist, test_labels, metric="precomputed")
 
         noise_fac = num_noise_samples / len(X)
-        values[i] = (
-            noise_fac * test_score_noise_separate
-            + (1 - noise_fac) * test_score_noise_combined
-        )
+        values[i] = noise_fac * test_score_noise_separate + (1 - noise_fac) * test_score_noise_combined
 
     # Get best clustering
     best_cluster = np.argmax(values)
     return clusterings[:, best_cluster]
 
 
-
 class ROME:
     """
-    A class for the Robust Multi-modal density Estimator (ROME). 
+    A class for the Robust Multi-modal density Estimator (ROME).
     It creates a point density invariant probability density function using
     nonparametric methods.
 
@@ -95,7 +85,7 @@ class ROME:
 
     fitted: bool
         a boolean indicating if the density estimator has been fitted to data
-    
+
     min_std: float
         minimum standard deviation the estimator assumes is present in the data
         (default is 0.1)
@@ -111,7 +101,7 @@ class ROME:
 
     T_mat: np.ndarray
         array of transformation matrices for each cluster
-        
+
     log_det_T_mat: np.ndarray
         array of log determinants of the transformation matrices for each cluster
 
@@ -178,21 +168,14 @@ class ROME:
                 self.optics = OPTICS(min_samples=num_min_samples)
                 self.optics.fit(X)
 
-                reachability = self.optics.reachability_[
-                    np.isfinite(self.optics.reachability_)
-                ]
+                reachability = self.optics.reachability_[np.isfinite(self.optics.reachability_)]
 
                 # Test potential cluster extractions
                 Eps = np.linspace(0, 1, 100) ** 2
-                Eps = (
-                    Eps * (reachability.max() - reachability.min())
-                    + reachability.min()
-                )
+                Eps = Eps * (reachability.max() - reachability.min()) + reachability.min()
                 Xi = np.linspace(0.01, 0.99, 99)
 
-                Method = np.repeat(
-                    np.array(["Eps", "Xi"]), (len(Eps), len(Xi))
-                )
+                Method = np.repeat(np.array(["Eps", "Xi"]), (len(Eps), len(Xi)))
                 Params = np.concatenate((Eps, Xi), axis=0)
 
                 # Initializes empty clusters
@@ -230,15 +213,11 @@ class ROME:
                     # Check for improvement
                     if len(np.unique(test_labels)) > 1:
                         # Check if there are lusters of size one
-                        test_clusters, test_size = np.unique(
-                            test_labels, return_counts=True
-                        )
+                        test_clusters, test_size = np.unique(test_labels, return_counts=True)
 
                         noise_clusters = test_clusters[test_size == 1]
                         test_labels[np.isin(test_labels, noise_clusters)] = -1
-                        test_labels[test_labels > -1] = np.unique(
-                            test_labels[test_labels > -1], return_inverse=True
-                        )[1]
+                        test_labels[test_labels > -1] = np.unique(test_labels[test_labels > -1], return_inverse=True)[1]
 
                         Clustering[:, i] = test_labels
 
@@ -256,9 +235,7 @@ class ROME:
 
         # initialise rotation matrix for PCA
         self.means = np.zeros((len(unique_labels), self.num_features))
-        self.T_mat = np.zeros(
-            (len(unique_labels), self.num_features, self.num_features)
-        )
+        self.T_mat = np.zeros((len(unique_labels), self.num_features, self.num_features))
 
         # Get probability adjustment
         self.log_det_T_mat = np.zeros(len(unique_labels))
@@ -280,12 +257,10 @@ class ROME:
             # Shift coordinate system origin to mean
             X_label_stand = X_label - self.means[[i]]
 
-            ## Decorrelate samples
+            # Decorrelate samples
             # Repeat data if not enough samples are available
             if num_samples < self.num_features:
-                c = np.tile(
-                    X_label_stand, (int(np.ceil(self.num_features / num_samples)), 1)
-                )
+                c = np.tile(X_label_stand, (int(np.ceil(self.num_features / num_samples)), 1))
             else:
                 c = X_label_stand.copy()
 
@@ -294,18 +269,21 @@ class ROME:
             attempt = 0
             successful_pca = False
             while not successful_pca:
-                try:
-                    pca = PCA(random_state=0).fit(c)
-                    successful_pca = True
-                except:
-                    e_fac = 10 ** (0.5 * attempt - 6)
-                    c[: self.num_features] += np.eye(self.num_features) * e_fac
+                if attempt < 10:
+                    try:
+                        pca = PCA(random_state=attempt).fit(c)
+                        successful_pca = True
+                    except:
+                        e_fac = 10 ** (0.5 * attempt - 6)
+                        c[: self.num_features] += np.eye(self.num_features) * e_fac
 
-                    # Prepare next attempt
-                    attempt += 1
+                        # Prepare next attempt
+                        attempt += 1
 
-                if not successful_pca:
-                    print("PCA failed, was done again with different random start.")
+                    if not successful_pca:
+                        print("PCA failed, was done again with different random start.")
+                else:
+                    pca = PCA(random_state=attempt).fit(c)
 
             # Exctract components std
             pca_std = np.sqrt(pca.explained_variance_)
@@ -316,11 +294,9 @@ class ROME:
             # Initiallize probability adjustment
             self.log_det_T_mat[i] = np.log(np.abs(np.linalg.det(self.T_mat[i])))
 
-            ## Apply standardization
+            # Apply standardization
             # Apply minimum std levels
-            pca_std = (
-                pca_std * (pca_std.max() - self.min_std) / pca_std.max() + self.min_std
-            )
+            pca_std = pca_std * (pca_std.max() - self.min_std) / pca_std.max() + self.min_std
 
             # Adjust T_mat accordingly
             self.T_mat[i] /= pca_std[np.newaxis]
@@ -330,9 +306,7 @@ class ROME:
             X_label_pca = X_label_stand @ self.T_mat[i]  # @ is matrix multiplication
 
             # Fit Surrogate distribution
-            model = KernelDensity(kernel="gaussian", bandwidth="silverman").fit(
-                X_label_pca
-            )
+            model = KernelDensity(kernel="gaussian", bandwidth="silverman").fit(X_label_pca)
 
             self.Models[i] = model
 
@@ -357,9 +331,7 @@ class ROME:
 
             # calculate silverman rule assuming only 1 sample
             bandwidth = ((self.num_features + 2) / 4) ** (-1 / (self.num_features + 4))
-            model_noise = KernelDensity(kernel="gaussian", bandwidth=bandwidth).fit(
-                X_noise_stand
-            )
+            model_noise = KernelDensity(kernel="gaussian", bandwidth=bandwidth).fit(X_noise_stand)
 
             self.Models[0] = model_noise
 
@@ -435,9 +407,7 @@ class ROME:
 
         # Determine cluster belonging
         np.random.seed(random_state)
-        labels = np.random.choice(
-            np.arange(len(self.Models)), num_samples, p=self.cluster_weights
-        )
+        labels = np.random.choice(np.arange(len(self.Models)), num_samples, p=self.cluster_weights)
 
         samples = []
 
@@ -456,9 +426,7 @@ class ROME:
                 raise ValueError("Estimator not considered.")
 
             # Apply inverse transformation to get original coordinate samples
-            X_label = (
-                X_label_stand @ np.linalg.inv(self.T_mat[label]) + self.means[[label]]
-            )
+            X_label = X_label_stand @ np.linalg.inv(self.T_mat[label]) + self.means[[label]]
 
             # Add samples to output set
             samples.append(X_label)
