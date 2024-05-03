@@ -3,19 +3,22 @@
 
 # ROME
 This package implements the [Robust Multi-Modal Density Estimation](https://arxiv.org/abs/2401.10566). 
-This method is using clustering based on the OPTICS algortihm, using is to order sample points based on rechability analysis, based on which the clustering which maximizes the silhuette is selected.
-On each cluster, it then uses normalization and decorrelation, before fitting applying simple KDE to it.
+This method creates a probability density function using nonparametric methods.
+ROME clusters data based on the OPTICS algortihm, using it to order sample points based on rechability analysis.
+It then generates the clustering which maximizes the silhouette score.
+Each cluster is then decorrelated and normalized before applying kernel density estimation.
 
-ROME has shown itself to be superior when dealing with multi-modal and highly corrolated distributions.
+ROME has shown itself to be superior when dealing with multi-modal and highly correlated distributions, especially for
+high dimensions.
 
 ## Installation
-ROME can be installed using.
+ROME can be installed using:
 ```
 pip install romepy
 ```
 
 ## Usage
-Inside a script, ROME is loaded by the following command.
+Inside a script, ROME is loaded by the following command:
 ```
 from ROME import ROME
 
