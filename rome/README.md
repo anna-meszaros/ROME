@@ -9,7 +9,18 @@ ROME has shown itself to be superior when dealing with multi-modal and highly co
 ROME can be installed using the simple "pip install romepy" command.
 
 ## Usage
-Inside a script, the following commands can be used:
-'''
-asdfasdf
-'''
+Inside a script, ROME is loaded by the following command.
+```
+from ROME import ROME
+
+rome = ROME()
+```
+
+After initiliazing ROME, one can then call the typical functions most scikit-learn density estimators (KDE, GMM, etc.) have:
+```
+rome = rome.fit(X, cluster=None)
+log_probs = rome.score_samples(X)
+X_new = rome.sample(num_samples = 10, random_state = 0)
+```
+
+The main difference is the *cluster* parameter in the fit function. If it is not set to *None*, it can be used to skip the OPTICS based clustering and use a predifened clustering instead.
