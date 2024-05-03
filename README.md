@@ -4,6 +4,11 @@ Code connected to the publication [Robust Multi-Modal Density Estimation](https:
 
 In order to run the experiments underlying the publication, run `Prob_func_eval.py`.
 
+In order to install ROME as a python package, execute
+```pip install romepy```.
+For further information on the usage of the package, please refer to [romepy on PyPi](https://pypi.org/project/romepy/).
+
+
 ## Data Extraction
 
 In order to read the results for the multi-modal distributions in a tabular form, run `data_extraction_baseline.py` for the baselines Manifold Parzen Windows<sup>[1]</sup> and Vine Copulas<sup>[2]</sup>, and `data_extraction.py` for the ablation studies.
