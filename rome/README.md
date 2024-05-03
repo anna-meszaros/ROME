@@ -20,7 +20,7 @@ pip install romepy
 ## Usage
 Inside a script, ROME is loaded by the following command:
 ```
-from ROME import ROME
+from rome.ROME import ROME
 
 rome = ROME()
 ```
@@ -36,4 +36,4 @@ The main difference is the *cluster* parameter in the *fit* function. If it is n
 
 
 ## Changelog
-Version 0.1.0: Initial upload of romepy.
+Version 0.1.2: Initial upload of romepy.

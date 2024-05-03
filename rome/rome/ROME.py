@@ -66,8 +66,7 @@ def _silhouette_multiple_clusterings(X, clusterings):
 class ROME:
     """
     A class for the Robust Multi-modal density Estimator (ROME).
-    It creates a point density invariant probability density function using
-    nonparametric methods.
+    It creates a probability density function using nonparametric methods.
 
     Spcecifically, it involves a multi-step process, where first clustering is
     performed using the OPTICS algorithm.

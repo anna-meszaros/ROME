@@ -1,9 +1,13 @@
 [tool.poetry]
 name = "romepy"
-version = "0.1.0"
+version = "0.1.1"
 description = "Python implementation of the Robust Multi-Modal Density Estimator (ROME)"
 authors = ["Anna Meszaros <ana.mesaros@gmail.com>",
             "Julian F. Schumann <julian.frederik.schumann@gmail.com>"]
+
+maintainers = ["anna-meszaros <ana.mesaros@gmail.com>",
+               "julianschumann <julian.frederik.schumann@gmail.com>"]
+
 readme = "README.md"
 packages = [{include = "rome"}]
 
