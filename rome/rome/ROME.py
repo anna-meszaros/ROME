@@ -161,7 +161,7 @@ class ROME:
         if clusters is None:
             if len(X) >= 5:
                 num_min_samples = X.shape[0] * self.num_features / 400
-                num_min_samples = int(np.clip(num_min_samples, min(5, X.shape[0]), 20))
+                num_min_samples = int(np.clip(num_min_samples, min(5, X.shape[0]), min(20, X.shape[0]))
 
                 # Get reachability plot
                 self.optics = OPTICS(min_samples=num_min_samples)
